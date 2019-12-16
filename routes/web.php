@@ -17,7 +17,8 @@
 
 Route::get('/','FrontController@inicio')->name('inicio');
 Route::post('solicitud','FrontController@solicitud')->name('solicitud');
-Route::post('documentos','FrontController@documentos')->name('documentos');
+Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
+Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
 
 Auth::routes();
 

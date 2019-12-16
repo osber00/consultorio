@@ -4,6 +4,7 @@ namespace Consultorio\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Consultorio\Models\Solicitud;
+use Consultorio\Models\Notasolicitud;
 use Auth;
 
 class FrontController extends Controller
@@ -24,10 +25,15 @@ class FrontController extends Controller
     	$solicitud->categoria_id = 1;
     	$solicitud->save();
     	$request->flash('paso2','Adjuntar documentos');
-    	return back();
+    	return redirect()->route('documentos',$solicitud->id);
     }
 
-    public function documentos(Request $request){
+    public function documentos($solicitud_id){
+        $solicitud = Solicitud::find($solicitud_id);
+        return view('front.documentos',compact($solicitud));
+    }
+
+    public function adjuntardocumentos(Request $request){
     	
     }
 }
