@@ -21,6 +21,8 @@ class CreateSolicitudsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('responsable_id')->unsigned();
             $table->foreign('responsable_id')->references('id')->on('users');
+            $table->integer('revisor_id')->unsigned()->nullable();
+            $table->foreign('revisor_id')->references('id')->on('users');
             $table->integer('estado_id')->unsigned();
             $table->foreign('estado_id')->references('id')->on('estados');
             $table->integer('prioridad_id')->unsigned();

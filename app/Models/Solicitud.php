@@ -3,6 +3,7 @@
 namespace Consultorio\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Date\Date;
 
 class Solicitud extends Model
 {
@@ -28,4 +29,8 @@ class Solicitud extends Model
     	return $this->belongsTo(Categoria::class);
     }
 
+    public function getFechaAttribute()
+    {
+        return new Date($this->created_at);
+    }
 }

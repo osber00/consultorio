@@ -20,10 +20,15 @@ Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
 
+Route::group(['prefix'=>'control'],function(){
+	Route::get('','ControlController@inicio')->name('admin');
+	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
+});
+
 Route::get('{folder}/{file}',function($folder,$file){
 	$file = Storage::url("$folder/$file");
 	return Response::make(file_get_contents($file),200);
-})->where([
+	})->where([
 	'file' => '(.*?)\.(jpg|png|jpeg|gif|pdf)$'
 ]);
 

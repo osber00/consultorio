@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
-    <title>Tutoriales | Cecar Virtual</title>
+    <title>Consultorio Jurídico 2.0| Cecar</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">
@@ -21,7 +21,7 @@
     <!-- Custom CSS -->
     <link href="{{asset('admin/css/style.css')}}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="{{asset('admin/css/colors/blue.css')}}" id="theme" rel="stylesheet">
+    <link href="{{asset('admin/css/colors/megna-dark.css')}}" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -70,7 +70,7 @@
                     <!-- Search -->
                     <li class="nav-item hidden-sm-down search-box">
                         <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                        <form action="{{route('busqueda-admin')}}" method="get" class="app-search" autocomplete="off">
+                        <form action="" method="get" class="app-search" autocomplete="off">
                             <input type="text" name="busqueda" class="form-control" placeholder="Escriba & enter"> <a class="srh-btn"><i class="ti-close"></i></a>
                         </form>
                     </li>
@@ -129,15 +129,15 @@
             <!-- Sidebar navigation-->
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
-                    <li class="nav-small-cap">SYSTEM</li>
+                    <li class="nav-small-cap">MENÚ</li>
                     <li>
                         <a class="waves-effect waves-dark" href="{{route('admin')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Inicio </span></a>
                     </li>
                     <li>
-                        <a class="waves-effect waves-dark" href="{{route('listatutoriales','e')}}" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Estudiantes</span></a>
+                        <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Estudiantes</span></a>
                     </li>
                     <li>
-                        <a class="waves-effect waves-dark" href="{{route('listatutoriales','t')}}" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Tutores</span></a>
+                        <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Tutores</span></a>
                     </li>
                     <li>
                         <a class="waves-effect waves-dark" href="{{ route('logout') }}"
