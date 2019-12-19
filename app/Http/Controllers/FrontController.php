@@ -10,7 +10,11 @@ use Auth;
 class FrontController extends Controller
 {
     public function inicio(){
-    	return view('front.inicio');
+        $solicitudes =  Solicitud::
+                where(['user_id'=>Auth::user()->id,'eliminada'=>0])
+                ->with(['responsable','estado','prioridad','categoria'])
+                ->get();
+    	return view('front.inicio',compact('solicitudes'));
     }
 
     public function solicitud(Request $request){
@@ -30,10 +34,48 @@ class FrontController extends Controller
 
     public function documentos($solicitud_id){
         $solicitud = Solicitud::find($solicitud_id);
-        return view('front.documentos',compact($solicitud));
+        $notasolicitud = Notasolicitud::where(['user_id'=>Auth::user()->id,'solicitud_id'=>$solicitud->id])->get();
+        return view('front.documentos',compact('solicitud','notasolicitud'));
     }
 
     public function adjuntardocumentos(Request $request){
-    	
+        
+    	if ($request->hasFile('archivo')) {
+            $mime   = $request->file('archivo')->getMimeType();
+            $ext    = $request->file('archivo')->getClientOriginalExtension();
+            //dd($ext);
+            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'JPG' || $ext == 'png' || $ext == 'PNG'){
+                $solicitud = Solicitud::find($request->get('solicitud_id'));
+
+                $file = $request->file('archivo');
+                $archivo = str_slug($solicitud->titulo).".".$ext;
+                $numDocNotas = Notasolicitud::where('solicitud_id',$solicitud->id)->count() + 1;
+                //$ruta = $request->archivo->store($solicitud->id);
+                $url = \Storage::disk('local')->put($solicitud->id.'/'.$numDocNotas.'-'.$archivo, \File::get($file));
+                //dd($url);
+
+                //dd($numDocNotas);
+                $notasolicitud = new Notasolicitud();
+                $notasolicitud->nota = $request->get('nota');
+                //$notasolicitud->archivo = $ruta;
+                $notasolicitud->archivo = $numDocNotas.'-'.$archivo;
+                $notasolicitud->user_id = Auth::user()->id;
+                $notasolicitud->solicitud_id = $solicitud->id;
+                $notasolicitud->save();
+
+                //$tutorial->pdf = $guide;
+                //$tutorial->save();
+
+                $request->session()->flash('archivo','exito');
+                return redirect()->route('documentos',$solicitud->id);
+            }else{
+                //No formato
+                $request->session()->flash('no-formato','no-formato');
+                return redirect()->back();
+            }
+        }else{
+            $request->session()->flash('no-file','no-file');
+            return redirect()->back();
+        }
     }
 }

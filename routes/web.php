@@ -20,6 +20,13 @@ Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
 
+Route::get('{folder}/{file}',function($folder,$file){
+	$file = Storage::url("$folder/$file");
+	return Response::make(file_get_contents($file),200);
+})->where([
+	'file' => '(.*?)\.(jpg|png|jpeg|gif|pdf)$'
+]);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

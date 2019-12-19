@@ -382,7 +382,7 @@
         initClientsSliders();    // Initializes Clients Sliders
         initVideoPlayAndClose(); // Video Play and Close Functionality
         initMail();              // Mail Initialization
-        initMapsNormal();        // Enable For Normal Map
+        //initMapsNormal();        // Enable For Normal Map
         //initMapsDark();          // Enable For Dark Map
 
     });

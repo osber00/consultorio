@@ -45,8 +45,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => public_path().'/file-guias',
-            //'root' => storage_path('app'),
+            //'root' => public_path().'/file-guias',
+            'root' => storage_path('app'),
         ],
 
         'public' => [

@@ -13,18 +13,29 @@
 		                <div class="card">
 		                    <div class="card-content">
 		        				<h4>Anexar documentos solicitud</h4>
-		                        <form action="{{route('adjuntardocumentos')}}" method="post" id="" name="c-form">
+		        				<p>Solicitud: <strong>{{$solicitud->titulo}}</strong></p>
+		        				<p>Descripción: {{$solicitud->descripcion}}</p>
+		        				<br>
+		        				{{--<img src="{{asset($solicitud->id.'/reclamo-recibo-de-la-luz.jpg')}}">--}}
+		        				@forelse($notasolicitud as $nota)
+									<p>{{$nota->nota}} <code>{{$nota->url_path}}</code></p>
+									{{--<a href="{{asset($solicitud->id.'/'.$nota->archivo)}}">doc</a>--}}
+									<br>
+		        				@empty
+		        					<p>No hay documentos anexos</p>
+		        				@endforelse
+		                        <form action="{{route('adjuntardocumentos')}}" method="post" id="" name="c-form" enctype="multipart/form-data">
 		                            {{csrf_field()}}
 		                            <!--Descripcion-->
+		                            <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
 		                            <div class="input-field">
-		                                <textarea id="descripcion" class="materialize-textarea" name="descripcion" required></textarea>
-		                                <label for="descripcion">Descripción</label>
+		                                <textarea id="nota" class="materialize-textarea" name="nota" required></textarea>
+		                                <label for="nota">Descripción</label>
 		                            </div>
 
 		                            <!--Titulo-->
 		                            <div class="input-field">
 		                                <input id="archivo" type="file" autocomplete="off" class="validate" name="archivo">
-		                                
 		                            </div>
 		                            <!-- SEND BUTTON -->
 		                            <div class="contact-send">
@@ -45,7 +56,7 @@
 		                <!-- CONTACT MAP -->
 		                <div id="map-card" class="card">
 		                    <!-- MAP -->
-		                    <div id="myMap"></div>
+		                    {{--<div id="myMap"></div>--}}
 		                </div>
 		            </div>
 
