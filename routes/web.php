@@ -27,6 +27,11 @@ Route::group(['prefix'=>'control'],function(){
 	Route::post('asignarsupervisor','ControlController@asignarsupervisor')->name('asignarsupervisor');
 	Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
 	Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
+
+	//
+	//Route::post('asignarsupervisor','ControlController@asignarsupervisor')->name('asignarsupervisor');
+	//Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
+	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
 });
 
 Route::get('{folder}/{file}',function($folder,$file){
