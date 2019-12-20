@@ -1,5 +1,9 @@
 @extends('layouts.control')
 
+<link rel="stylesheet" href="{{asset('assets/plugins/html5-editor/bootstrap-wysihtml5.css')}}" />
+<!-- Dropzone css -->
+<link href="{{asset('assets/plugins/dropzone-master/dist/dropzone.css')}}" rel="stylesheet" type="text/css" />
+
 @section('titulo')
 <div class="row page-titles">
     <div class="col-md-5 col-8 align-self-center">
@@ -10,6 +14,7 @@
         </ol>
     </div>
 </div>
+
 @endsection
 
 @section('contenido')
@@ -117,7 +122,7 @@
                                                 <div class="input-group">
                                                     <select name="categoria_id" class="form-control">
 			                                			@foreach($categorias as $categoria)
-			                                			<option value="{{$categoria->id}}">{{$categoria->categoria}}</option>
+			                                			<option value="{{$categoria->id}}" @if($categoria->id == $solicitud->categoria_id) selected @endif>{{$categoria->categoria}}</option>
 			                                			@endforeach
 			                                		</select>
                                                     <span class="input-group-btn">
@@ -137,7 +142,7 @@
                                                 <div class="input-group">
                                                     <select name="prioridad_id" class="form-control">
 			                                			@foreach($prioridades as $prioridad)
-			                                			<option value="{{$prioridad->id}}">{{$prioridad->prioridad}} <small>({{$prioridad->tiempo}})</small></option>
+			                                			<option value="{{$prioridad->id}}"  @if($prioridad->id == $solicitud->prioridad_id) selected @endif>{{$prioridad->prioridad}} <small>({{$prioridad->tiempo}})</small></option>
 			                                			@endforeach
 			                                		</select>
                                                     <span class="input-group-btn">
@@ -158,7 +163,7 @@
                                                     <select name="responsable_id" class="form-control">
 			                                			{{--<option value="0">Seleccione estudiante</option>--}}
 			                                			@foreach($estudiantes as $estudiante)
-			                                			<option value="{{$estudiante->id}}">{{$estudiante->nombre}}</option>
+			                                			<option value="{{$estudiante->id}}" @if($estudiante->id == $solicitud->responsable_id) selected @endif >{{$estudiante->nombre}}</option>
 			                                			@endforeach
 			                                		</select>
                                                     <span class="input-group-btn">
@@ -179,7 +184,7 @@
                                                     <select name="revisor_id" class="form-control">
 			                                			{{--<option value="0">Seleccione supervisor</option>--}}
 			                                			@foreach($tutores as $tutor)
-			                                			<option value="{{$tutor->id}}">{{$tutor->nombre}}</option>
+			                                			<option value="{{$tutor->id}}" @if($tutor->id == $solicitud->revisor_id) selected @endif >{{$tutor->nombre}}</option>
 			                                			@endforeach
 			                                		</select>
                                                     <span class="input-group-btn">
@@ -195,23 +200,23 @@
                             <div>
                                 <hr class="m-t-0">
                             </div>
-                            {{--<div class="card-body">
-                                <h4><i class="fa fa-paperclip m-r-10 m-b-10"></i> Attachments <span>(3)</span></h4>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <a href="#"> <img class="img-thumbnail img-responsive" alt="attachment" src="{{asset('assets/images/big/img1.jpg')}}"> </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a href="#"> <img class="img-thumbnail img-responsive" alt="attachment" src="{{asset('assets/images/big/img2.jpg')}}"> </a>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a href="#"> <img class="img-thumbnail img-responsive" alt="attachment" src="{{asset('assets/images/big/img3.jpg')}}"> </a>
-                                    </div>
-                                </div>
-                                <div class="b-all m-t-20 p-20">
-                                    <p class="p-b-20">click here to <a href="#">Reply</a> or <a href="#">Forward</a></p>
-                                </div>
-                            </div>--}}
+                           <div class="col-xlg-10 col-lg-12 col-md-12">
+	                           	<div class="card-body">
+	                               	<h3 class="card-title">Agregar nota</h3>
+	                               	<form action="{{route('agregarnota')}}" method="POST" enctype="multipart/form-data">
+	                               		{{csrf_field()}}
+	                               		<input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
+		                               	<div class="form-group">
+		                                   	<textarea class="textarea_description form-control" rows="10" name="nota" placeholder="Escribir nota"></textarea>
+		                               	</div>
+		                               	<div class="form-group">
+						                   	<label for="input-file-now">Agregar documento a la nota <small>(Imágenes png, jpg y documentos pdf)</small></label>
+						                   	<input type="file" name="archivo" id="input-file-now" class="dropify" />
+						               	</div>
+		                               	<button type="submit" class="btn btn-danger m-t-20"><i class="fa fa-envelope-o"></i> Enviar</button>
+	                               </form>
+	                           	</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,4 +224,32 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+	@parent
+	<script src="{{asset('assets/plugins/switchery/dist/switchery.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/toast-master/js/jquery.toast.js')}}"></script>
+    <script src="{{asset('assets/plugins/dropify/dist/js/dropify.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/html5-editor/wysihtml5-0.3.0.js')}}"></script>
+    <script src="{{asset('assets/plugins/html5-editor/bootstrap-wysihtml5.js')}}"></script>
+    <script>
+    $(document).ready(function() {
+        //var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+            $('.js-switch').each(function() {
+                new Switchery($(this)[0], $(this).data());
+            });
+
+            // Basic
+            $('.dropify').dropify({
+                messages: {
+                    default: 'Arrastre y suelte un PDF aquí o haga click',
+                    replace: 'Arrastre y suelte un PDF aquí o haga click para reemplazar',
+                    remove: 'Quitar',
+                    error: 'El archivo es damasiado grande'
+                }
+            });
+            $('.textarea_description').wysihtml5();
+    });
+    </script>
 @endsection

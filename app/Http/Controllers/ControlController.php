@@ -3,10 +3,12 @@
 namespace Consultorio\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Consultorio\Models\Notasolicitud;
 use Consultorio\Models\Solicitud;
 use Consultorio\Models\Prioridad;
 use Consultorio\Models\Categoria;
 use Consultorio\Models\User;
+use Auth;
 
 class ControlController extends Controller
 {
@@ -73,6 +75,43 @@ class ControlController extends Controller
     		return back();
     	}else{
     		return back();
+    	}
+    }
+
+    public function agregarnota(Request $request){
+    	$solicitud = Solicitud::find($request->get('solicitud_id'));
+    	//dd($request->all());
+    	if ($request->hasFile('archivo')) {
+    		$ext    = $request->file('archivo')->getClientOriginalExtension();
+            //dd($ext);
+            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'JPG' || $ext == 'png' || $ext == 'PNG'){
+            	$file = $request->file('archivo');
+                $archivo = str_slug($solicitud->titulo).".".$ext;
+                $numDocNotas = Notasolicitud::where('solicitud_id',$solicitud->id)->count() + 1;
+                //$ruta = $request->archivo->store($solicitud->id);
+                $url = \Storage::disk('local')->put($solicitud->id.'/'.$numDocNotas.'-'.$archivo, \File::get($file));
+                //dd($url);
+
+                //dd($numDocNotas);
+                $notasolicitud = new Notasolicitud();
+                $notasolicitud->nota = $request->get('nota');
+                //$notasolicitud->archivo = $ruta;
+                $notasolicitud->archivo = $numDocNotas.'-'.$archivo;
+                $notasolicitud->user_id = Auth::user()->id;
+                $notasolicitud->solicitud_id = $solicitud->id;
+                $notasolicitud->save();
+                return back();
+            }else{
+            	//No formato
+            	
+            }
+    	}else{
+    		$notasolicitud = new Notasolicitud();
+            $notasolicitud->nota = $request->get('nota');
+            $notasolicitud->user_id = Auth::user()->id;
+            $notasolicitud->solicitud_id = $solicitud->id;
+            $notasolicitud->save();
+            return back();
     	}
     }
 }
