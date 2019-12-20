@@ -7,10 +7,14 @@ use Jenssegers\Date\Date;
 
 class Solicitud extends Model
 {
-    protected $fillable = ['titulo','descripcion','user_id','responsable_id','estado_id','prioridad_id','categoria_id'];
+    protected $fillable = ['titulo','descripcion','user_id','responsable_id','supervisor_id','estado_id','prioridad_id','categoria_id'];
 
     public function user(){
     	return $this->belongsTo(User::class);
+    }
+
+    public function revisor(){
+        return $this->belongsTo(User::class);
     }
 
     public function responsable(){
