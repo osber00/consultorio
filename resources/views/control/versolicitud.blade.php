@@ -22,7 +22,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="row">
-                <div class="col-xlg-2 col-lg-4 col-md-4">
+                <div class="col-xlg-2 col-lg-3 col-md-3">
                     <div class="card-body inbox-panel"><a href="" class="btn btn-danger m-b-20 p-10 btn-block waves-effect waves-light">Compose</a>
                         <ul class="list-group list-group-full">
                             <li class="list-group-item active"> 
@@ -45,7 +45,7 @@
                         <div class="list-group b-0 mail-list"> <a href="#" class="list-group-item"><span class="fa fa-circle text-info m-r-10"></span>Work</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-warning m-r-10"></span>Family</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-purple m-r-10"></span>Private</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-danger m-r-10"></span>Friends</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-success m-r-10"></span>Corporate</a> </div>
                     </div>
                 </div>
-                <div class="col-xlg-10 col-lg-8 col-md-8">
+                <div class="col-xlg-10 col-lg-9 col-md-9">
                     <div class="card-body">
                         <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
                             <button type="button" class="btn btn-secondary font-18 text-dark"><i class="mdi mdi-inbox-arrow-down"></i></button>
@@ -200,6 +200,16 @@
                             <div>
                                 <hr class="m-t-0">
                             </div>
+                            <div class="col-xlg-10 col-lg-12 col-md-12">
+                                <div class="card-body">
+                                    <h3 class="card-title">Notas del caso</h3>
+                                    <ul>
+                                        @foreach($notas as $nota)
+                                            <li>{{$nota->nota}} <code>{{$nota->user->nombre}}</code> </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
                            <div class="col-xlg-10 col-lg-12 col-md-12">
 	                           	<div class="card-body">
 	                               	<h3 class="card-title">Agregar nota</h3>
@@ -213,6 +223,10 @@
 						                   	<label for="input-file-now">Agregar documento a la nota <small>(Imágenes png, jpg y documentos pdf)</small></label>
 						                   	<input type="file" name="archivo" id="input-file-now" class="dropify" />
 						               	</div>
+                                        <div class="form-group">
+                                            <input type="checkbox" name="privada"  class="js-switch" data-color="#f62d51" data-size="small" />
+                                            Marcar como nota privada
+                                        </div>
 		                               	<button type="submit" class="btn btn-danger m-t-20"><i class="fa fa-envelope-o"></i> Enviar</button>
 	                               </form>
 	                           	</div>

@@ -28,7 +28,8 @@ class ControlController extends Controller
     	$tutores = User::where(['rol_id'=>2, 'activo' => 1])->get();
     	$categorias = Categoria::all();
     	$prioridades = Prioridad::all();
-    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades'));
+    	$notas = Notasolicitud::where('solicitud_id',$solicitud->id)->with('user')->get();
+    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas'));
     }
 
     public function asignaresponsable(Request $request){
@@ -99,6 +100,9 @@ class ControlController extends Controller
                 $notasolicitud->archivo = $numDocNotas.'-'.$archivo;
                 $notasolicitud->user_id = Auth::user()->id;
                 $notasolicitud->solicitud_id = $solicitud->id;
+                if ($request->get('privada')){
+                    $notasolicitud->publico = false;
+                }
                 $notasolicitud->save();
                 return back();
             }else{
@@ -110,6 +114,9 @@ class ControlController extends Controller
             $notasolicitud->nota = $request->get('nota');
             $notasolicitud->user_id = Auth::user()->id;
             $notasolicitud->solicitud_id = $solicitud->id;
+            if ($request->get('privada')){
+                $notasolicitud->publico = false;
+            }
             $notasolicitud->save();
             return back();
     	}

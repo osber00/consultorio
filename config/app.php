@@ -177,7 +177,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
 
         /*Slack*/
-        Maknz\Slack\SlackServiceProvider::class,
+        //Maknz\Slack\SlackServiceProvider::class,
         //Notify\Laravel\SlackServiceProvider::class
 
         /*
