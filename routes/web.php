@@ -23,10 +23,10 @@ Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('ad
 Route::group(['prefix'=>'control'],function(){
 	Route::get('','ControlController@inicio')->name('admin');
 	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
-	Route::post('asignaresponsable','ControlController@asignaresponsable')->name('asignaresponsable');
-	Route::post('asignarsupervisor','ControlController@asignarsupervisor')->name('asignarsupervisor');
-	Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
-	Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
+	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
+	Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor');
+	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria');
+	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
 	Route::post('agregarnota','ControlController@agregarnota')->name('agregarnota');
 
 	//Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');

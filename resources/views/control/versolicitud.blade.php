@@ -42,11 +42,17 @@
                             </li>
                         </ul>
                         <h3 class="card-title m-t-40">Labels</h3>
-                        <div class="list-group b-0 mail-list"> <a href="#" class="list-group-item"><span class="fa fa-circle text-info m-r-10"></span>Work</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-warning m-r-10"></span>Family</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-purple m-r-10"></span>Private</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-danger m-r-10"></span>Friends</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-success m-r-10"></span>Corporate</a> </div>
+                        {{--<div class="list-group b-0 mail-list">
+                            <a href="#" class="list-group-item"><span class="fa fa-circle text-info m-r-10"></span>Work</a>
+                            <a href="#" class="list-group-item"><span class="fa fa-circle text-warning m-r-10"></span>Family</a>
+                            <a href="#" class="list-group-item"><span class="fa fa-circle text-purple m-r-10"></span>Private</a>
+                            <a href="#" class="list-group-item"><span class="fa fa-circle text-danger m-r-10"></span>Friends</a>
+                            <a href="#" class="list-group-item"><span class="fa fa-circle text-success m-r-10"></span>Corporate</a>
+                        </div>--}}
                     </div>
                 </div>
                 <div class="col-xlg-10 col-lg-9 col-md-9">
-                    <div class="card-body">
+                    {{--<div class="card-body">
                         <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
                             <button type="button" class="btn btn-secondary font-18 text-dark"><i class="mdi mdi-inbox-arrow-down"></i></button>
                             <button type="button" class="btn btn-secondary font-18 text-dark"><i class="mdi mdi-alert-octagon"></i></button>
@@ -67,7 +73,7 @@
                             <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> More </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"> <a class="dropdown-item" href="#">Mark as all read</a> <a class="dropdown-item" href="#">Dropdown link</a> </div>
                         </div>
-                    </div>
+                    </div>--}}
                     <div class="card-body p-t-0">
                         <div class="card b-all shadow-none">
                             <div class="card-body">
@@ -100,8 +106,62 @@
                                 <p><b>Descripción de la solicitud</b></p>
                                 <p>{{$solicitud->descripcion}}</p>
 
+                                <div class="row">
+                                    <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="mdi mdi-chart-arc font-18 "></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                @foreach($categorias as $categoria)
+                                                <a class="dropdown-item" href="{{route('modificarcategoria',[$solicitud->id,$categoria->id])}}">
+                                                    {{$categoria->categoria}}
+                                                </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="mdi mdi-calendar-clock font-18"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                @foreach($prioridades as $prioridad)
+                                                <a class="dropdown-item" href="{{route('modificarprioridad',[$solicitud->id,$prioridad->id])}}">{{$prioridad->prioridad}} ({{$prioridad->tiempo}})</a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="mdi mdi-account-multiple-plus font-18 "></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                @foreach($estudiantes as $estudiante)
+                                                    <a class="dropdown-item" href="{{route('asignaresponsable',[$solicitud->id,$estudiante->id])}}">
+                                                        {{$estudiante->nombre}}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="mdi mdi-account-star font-18"></i>
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                @foreach($tutores as $tutor)
+                                                    <a class="dropdown-item" href="{{route('asignarsupervisor',[$solicitud->id,$tutor->id])}}">
+                                                        {{$tutor->nombre}}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 								<div class="row">
-									<form action="{{route('modificarcategoria')}}" method="post" class="input-form">
+									{{--<form action="{{route('modificarcategoria')}}" method="post" class="input-form">
                                         {{csrf_field()}}
                                         <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
                                         <label class="control-label m-t-20"><i class="mdi mdi-buffer"></i> Asignar categoria</label>
@@ -119,9 +179,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form>--}}
 
-                                    <form action="{{route('modificarprioridad')}}" method="post" class="input-form">
+                                    {{--<form action="{{route('modificarprioridad')}}" method="post" class="input-form">
                                         {{csrf_field()}}
                                         <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
                                         <label class="control-label m-t-20"><i class="mdi mdi-buffer"></i> Asignar prioridad</label>
@@ -139,17 +199,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form>--}}
 
-									<form action="{{route('asignaresponsable')}}" method="post" class="input-form">
+									{{--<form action="{{route('asignaresponsable')}}" method="post" class="input-form">
                                         {{csrf_field()}}
                                         <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
                                         <label class="control-label m-t-20"><i class="mdi mdi-account-multiple-plus"></i> Asignar estudiante</label>
                                         <div class="row">
-                                            <div class="col-lg-11">
+                                            <div class="col-lg-12">
                                                 <div class="input-group">
                                                     <select name="responsable_id" class="form-control">
-			                                			{{--<option value="0">Seleccione estudiante</option>--}}
+			                                			--}}{{--<option value="0">Seleccione estudiante</option>--}}{{--
 			                                			@foreach($estudiantes as $estudiante)
 			                                			<option value="{{$estudiante->id}}" @if($estudiante->id == $solicitud->responsable_id) selected @endif >{{$estudiante->nombre}}</option>
 			                                			@endforeach
@@ -160,17 +220,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form>--}}
 
-                                    <form action="{{route('asignarsupervisor')}}" method="post" class="input-form">
+                                    {{--<form action="{{route('asignarsupervisor')}}" method="post" class="input-form">
                                         {{csrf_field()}}
                                         <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
                                         <label class="control-label m-t-20"><i class="mdi mdi-account-star"></i> Asignar supervisor</label>
                                         <div class="row">
-                                            <div class="col-lg-11">
+                                            <div class="col-lg-12">
                                                 <div class="input-group">
                                                     <select name="revisor_id" class="form-control">
-			                                			{{--<option value="0">Seleccione supervisor</option>--}}
+			                                			--}}{{--<option value="0">Seleccione supervisor</option>--}}{{--
 			                                			@foreach($tutores as $tutor)
 			                                			<option value="{{$tutor->id}}" @if($tutor->id == $solicitud->revisor_id) selected @endif >{{$tutor->nombre}}</option>
 			                                			@endforeach
@@ -181,7 +241,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form>--}}
 								</div>
 
                             </div>

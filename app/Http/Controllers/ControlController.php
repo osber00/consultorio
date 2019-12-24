@@ -32,10 +32,10 @@ class ControlController extends Controller
     	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas'));
     }
 
-    public function asignaresponsable(Request $request){
-    	$solicitud = Solicitud::find($request->get('solicitud_id'));
+    public function asignaresponsable(Request $request, $id,$responsable){
+    	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
-    		$solicitud->responsable_id = $request->get('responsable_id');
+    		$solicitud->responsable_id = $responsable;
     		$solicitud->estado_id = 2;
     		$solicitud->save();
     		return back();
@@ -45,10 +45,10 @@ class ControlController extends Controller
     	//dd($request->all());
     }
 
-    public function asignarsupervisor(Request $request){
-    	$solicitud = Solicitud::find($request->get('solicitud_id'));
+    public function asignarsupervisor(Request $request,$id,$supervisor){
+    	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
-    		$solicitud->revisor_id = $request->get('revisor_id');
+    		$solicitud->revisor_id = $supervisor;
     		$solicitud->save();
     		return back();
     	}else{
@@ -57,10 +57,10 @@ class ControlController extends Controller
     	//dd($request->all());
     }
 
-    public function modificarcategoria(Request $request){
-    	$solicitud = Solicitud::find($request->get('solicitud_id'));
+    public function modificarcategoria(Request $request, $id, $categoria){
+    	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
-    		$solicitud->categoria_id = $request->get('categoria_id');
+    		$solicitud->categoria_id = $categoria;
     		$solicitud->save();
     		return back();
     	}else{
@@ -68,10 +68,10 @@ class ControlController extends Controller
     	}
     }
 
-    public function modificarprioridad(Request $request){
-    	$solicitud = Solicitud::find($request->get('solicitud_id'));
+    public function modificarprioridad(Request $request, $id, $prioridad){
+    	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
-    		$solicitud->prioridad_id = $request->get('prioridad_id');
+    		$solicitud->prioridad_id = $prioridad;
     		$solicitud->save();
     		return back();
     	}else{
