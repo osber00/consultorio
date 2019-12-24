@@ -43,22 +43,16 @@ class FrontController extends Controller
     	if ($request->hasFile('archivo')) {
             $mime   = $request->file('archivo')->getMimeType();
             $ext    = $request->file('archivo')->getClientOriginalExtension();
-            //dd($ext);
-            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'JPG' || $ext == 'png' || $ext == 'PNG'){
+            str_slug($ext);
+            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'png'){
                 $solicitud = Solicitud::find($request->get('solicitud_id'));
+                //Salvar archivo en public de storage
+                $ruta = $request->archivo->store($solicitud->id);
 
-                $file = $request->file('archivo');
-                $archivo = str_slug($solicitud->titulo).".".$ext;
-                $numDocNotas = Notasolicitud::where('solicitud_id',$solicitud->id)->count() + 1;
-                //$ruta = $request->archivo->store($solicitud->id);
-                $url = \Storage::disk('local')->put($solicitud->id.'/'.$numDocNotas.'-'.$archivo, \File::get($file));
-                //dd($url);
-
-                //dd($numDocNotas);
                 $notasolicitud = new Notasolicitud();
                 $notasolicitud->nota = $request->get('nota');
-                //$notasolicitud->archivo = $ruta;
-                $notasolicitud->archivo = $numDocNotas.'-'.$archivo;
+                $notasolicitud->archivo = $ruta;
+                $notasolicitud->ext = $ext;
                 $notasolicitud->user_id = Auth::user()->id;
                 $notasolicitud->solicitud_id = $solicitud->id;
                 $notasolicitud->save();

@@ -83,21 +83,17 @@ class ControlController extends Controller
     	$solicitud = Solicitud::find($request->get('solicitud_id'));
     	//dd($request->all());
     	if ($request->hasFile('archivo')) {
-    		$ext    = $request->file('archivo')->getClientOriginalExtension();
-            //dd($ext);
-            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'JPG' || $ext == 'png' || $ext == 'PNG'){
-            	$file = $request->file('archivo');
-                $archivo = str_slug($solicitud->titulo).".".$ext;
-                $numDocNotas = Notasolicitud::where('solicitud_id',$solicitud->id)->count() + 1;
-                //$ruta = $request->archivo->store($solicitud->id);
-                $url = \Storage::disk('local')->put($solicitud->id.'/'.$numDocNotas.'-'.$archivo, \File::get($file));
-                //dd($url);
+    		 $ext    = $request->file('archivo')->getClientOriginalExtension();
+            str_slug($ext);
+            if ($ext=='pdf' || $ext == 'jpg' || $ext == 'png'){
+                //Salvar archivo en public de storage
+                $ruta = $request->archivo->store($solicitud->id);
 
                 //dd($numDocNotas);
                 $notasolicitud = new Notasolicitud();
                 $notasolicitud->nota = $request->get('nota');
-                //$notasolicitud->archivo = $ruta;
-                $notasolicitud->archivo = $numDocNotas.'-'.$archivo;
+                $notasolicitud->archivo = $ruta;
+                $notasolicitud->ext = $ext;
                 $notasolicitud->user_id = Auth::user()->id;
                 $notasolicitud->solicitud_id = $solicitud->id;
                 if ($request->get('privada')){

@@ -18,8 +18,12 @@
 		        				<br>
 		        				{{--<img src="{{asset($solicitud->id.'/reclamo-recibo-de-la-luz.jpg')}}">--}}
 		        				@forelse($notasolicitud as $nota)
-									<p>{{$nota->nota}} <code>{{$nota->url_path}}</code></p>
-									{{--<a href="{{asset($solicitud->id.'/'.$nota->archivo)}}">doc</a>--}}
+									<p>
+										{{$nota->nota}}
+										{{--<code>{{$nota->url_path}}</code>--}}
+									</p>
+									{{--<img src="{{route('notadocumento',$nota->id)}}" alt="">--}}
+									<a href="{{route('notadocumento',$nota->id)}}" target="_blank">Ver documento</a>
 									<br>
 		        				@empty
 		        					<p>No hay documentos anexos</p>

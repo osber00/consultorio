@@ -33,12 +33,7 @@ Route::group(['prefix'=>'control'],function(){
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
 });
 
-Route::get('{folder}/{file}',function($folder,$file){
-	$file = Storage::url("$folder/$file");
-	return Response::make(file_get_contents($file),200);
-	})->where([
-	'file' => '(.*?)\.(jpg|png|jpeg|gif|pdf)$'
-]);
+Route::get('nota/documento/{id}','AssetController@notadocumento')->name('notadocumento');
 
 Auth::routes();
 

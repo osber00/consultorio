@@ -3,6 +3,7 @@
 namespace Consultorio\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Date\Date;
 
 class Notasolicitud extends Model
 {
@@ -14,5 +15,10 @@ class Notasolicitud extends Model
 
     public function getUrlPathAttribute(){
     	return \Storage::url($this->archivo);
+    }
+
+    public function getFechaAttribute()
+    {
+        return new Date($this->created_at);
     }
 }

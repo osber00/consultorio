@@ -99,18 +99,6 @@
                                 </p>
                                 <p><b>Descripción de la solicitud</b></p>
                                 <p>{{$solicitud->descripcion}}</p>
-                                {{--<form action="" method="post" class="col-md-4">
-                                	{{csrf_field()}}
-                                	<input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
-                                	<div>
-                                		<select name="estudiante_id" class="form-control">
-                                			<option value="0">Seleccione estudiante</option>
-                                			@foreach($estudiantes as $estudiante)
-                                			<option value="{{$estudiante->id}}">{{$estudiante->nombre}}</option>
-                                			@endforeach
-                                		</select>
-                                	</div>
-                                </form>--}}
 
 								<div class="row">
 									<form action="{{route('modificarcategoria')}}" method="post" class="input-form">
@@ -203,11 +191,54 @@
                             <div class="col-xlg-10 col-lg-12 col-md-12">
                                 <div class="card-body">
                                     <h3 class="card-title">Notas del caso</h3>
-                                    <ul>
+                                    <div class="">
+                                        @foreach($notas as $nota)
+                                        <div class="sl-item">
+                                            {{--<div class="sl-left">
+                                                <img src="{{asset('assets/images/users/2.jpg')}}" alt="user" class="img-circle">
+                                            </div>--}}
+                                            <div class="">
+                                                <div>
+                                                    <a href="#" class="link">
+                                                        <small><strong>{{$nota->user->nombre}}</strong></small>
+                                                    </a>
+                                                    <span class="sl-date">{{$nota->fecha->format('l j \\ F h:i:s a')}}</span>
+                                                    <div class="m-t-20 row">
+                                                        <div class="col-md-9 col-xs-12">
+                                                            <p>
+                                                                {!! $nota->nota !!}
+                                                                <br>
+                                                                @if($nota->archivo != null)
+                                                                <small>
+                                                                    <a href="{{route('notadocumento',$nota->id)}}" target="_blank"><i class="mdi mdi-paperclip"></i> Ver documento</a>
+                                                                </small>
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                        {{--@if($nota->archivo != null)
+                                                        <div class="col-md-3 col-xs-12">
+                                                            <img src="{{asset('assets/images/big/img1.jpg')}}" alt="user" class="img-responsive radius">
+                                                        </div>
+                                                        @endif--}}
+                                                    </div>
+                                                    <div class="like-comm m-t-20">
+                                                        @if(!$nota->publico)
+                                                        <small>
+                                                            <a href="javascript:void(0)" class="link m-r-10"><i class="mdi mdi-comment-alert-outline text-danger"></i> Nota privada</a>
+                                                        </small>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        @endforeach
+                                    </div>
+                                    {{--<ul>
                                         @foreach($notas as $nota)
                                             <li>{{$nota->nota}} <code>{{$nota->user->nombre}}</code> </li>
                                         @endforeach
-                                    </ul>
+                                    </ul>--}}
                                 </div>
                             </div>
                            <div class="col-xlg-10 col-lg-12 col-md-12">
