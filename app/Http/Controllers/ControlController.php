@@ -28,7 +28,7 @@ class ControlController extends Controller
     	$tutores = User::where(['rol_id'=>2, 'activo' => 1])->get();
     	$categorias = Categoria::all();
     	$prioridades = Prioridad::all();
-    	$notas = Notasolicitud::where('solicitud_id',$solicitud->id)->with('user')->get();
+    	$notas = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->with('user')->get();
     	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas'));
     }
 

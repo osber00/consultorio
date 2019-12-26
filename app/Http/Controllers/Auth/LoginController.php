@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    //protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -35,6 +35,29 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Get the post register / login redirect path.
+     *
+     * @return string
+     */
+    public function redirectPath()
+    {
+        /*if (method_exists($this, 'redirectTo')) {
+            return $this->redirectTo();
+        }*/
+
+        if (auth()->user()->rol_id == '1') {
+            return property_exists($this, 'redirectTo') ? $this->redirectTo : '/control';
+        }else if (auth()->user()->rol_id == '2') {
+            return property_exists($this, 'redirectTo') ? $this->redirectTo : '/tutor';
+        }else if (auth()->user()->rol_id == '3') {
+            return property_exists($this, 'redirectTo') ? $this->redirectTo : '/estudiante';
+        }
+
+        //Usuario cliente
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
     }
 
     /**

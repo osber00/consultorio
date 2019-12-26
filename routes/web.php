@@ -20,7 +20,7 @@ Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
 
-Route::group(['prefix'=>'control'],function(){
+Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::get('','ControlController@inicio')->name('admin');
 	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
 	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
@@ -31,6 +31,14 @@ Route::group(['prefix'=>'control'],function(){
 
 	//Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
+});
+
+Route::group(['prefix'=>'estudiante'],function (){
+    Route::get('/', 'EstudianteController@inicio')->name('estudiante');
+});
+
+Route::group(['prefix'=>'tutor'],function (){
+    Route::get('/', 'TutorController@inicio')->name('tutor');
 });
 
 Route::get('nota/documento/{id}','AssetController@notadocumento')->name('notadocumento');

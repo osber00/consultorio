@@ -31,4 +31,9 @@ class User extends Authenticatable
         return $this->belongsTo(Solicitud::class);
     }
 
+    public function notasolicitud()
+    {
+        return $this->belongsTo(Notasolicitud::class);
+    }
+
 }

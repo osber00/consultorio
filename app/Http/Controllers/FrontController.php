@@ -10,10 +10,14 @@ use Auth;
 class FrontController extends Controller
 {
     public function inicio(){
-        $solicitudes =  Solicitud::
-                where(['user_id'=>Auth::user()->id,'eliminada'=>0])
+        if(auth()->user()){
+            $solicitudes =  Solicitud::
+            where(['user_id'=>Auth::user()->id,'eliminada'=>0])
                 ->with(['responsable','estado','prioridad','categoria'])
                 ->get();
+        }else{
+            $solicitudes = null;
+        }
     	return view('front.inicio',compact('solicitudes'));
     }
 

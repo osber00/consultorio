@@ -21,4 +21,6 @@ class Notasolicitud extends Model
     {
         return new Date($this->created_at);
     }
+
+
 }
