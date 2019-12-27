@@ -56,7 +56,7 @@ class DatosTestSeeder extends Seeder
     }
 
     private function estados(){
-        for ($i=1; $i <=5 ; $i++) { 
+        for ($i=1; $i <=6 ; $i++) {
             if($i==1){
                 Estado::create([
                     'estado' => 'nueva'
@@ -84,6 +84,12 @@ class DatosTestSeeder extends Seeder
             if($i==5){
                 Estado::create([
                     'estado' => 'resuelta'
+                ]);
+            }
+
+            if($i==6){
+                Estado::create([
+                    'estado' => 'rechazada'
                 ]);
             }
         }

@@ -23,6 +23,8 @@ class CreateNotasolicitudsTable extends Migration
             $table->integer('solicitud_id')->unsigned();
             $table->foreign('solicitud_id')->references('id')->on('solicituds');
             $table->boolean('publico')->default(true);
+            $table->boolean('editada')->default(false);
+            $table->integer('ediciones')->default(0);
             $table->boolean('eliminado')->default(false);
             $table->timestamps();
         });

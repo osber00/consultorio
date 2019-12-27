@@ -7,7 +7,7 @@ use Jenssegers\Date\Date;
 
 class Notasolicitud extends Model
 {
-    protected $fillable = ['nota','archivo','user_id','solicitud_id','publico'];
+    protected $fillable = ['nota','archivo','user_id','solicitud_id','publico','eliminado','editada','ediciones'];
 
     public function user(){
         return $this->belongsTo(User::class);

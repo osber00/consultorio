@@ -137,7 +137,19 @@
                                                         @endif
                                                         <br>
                                                         @can('editar',$nota)
-                                                            <a href="" class="btn btn-dark btn-xs">Editar (*)</a>
+                                                            <a href="{{route('notasolicitud',[$nota->id,'editar'])}}" data-toggle="modal" data-target="#editarNota" class="btn btn-dark btn-xs btn_edicion_nota">Editar</a>
+                                                            <a href="{{route('notasolicitud',[$nota->id,'eliminar'])}}" data-toggle="modal" data-target="#borrarNota" class="btn btn-danger btn-xs btn_eliminacion_nota">Eliminar</a>
+                                                            @if($nota->publico)
+                                                                <a href="{{route('publicoprivado',$nota->id)}}" class="btn btn-warning btn-xs">Hacer privada</a>
+                                                            @else
+                                                                <a href="{{route('publicoprivado',$nota->id)}}" class="btn btn-success btn-xs">Hacer pública</a>
+                                                            @endif
+
+                                                            @if($nota->archivo != null)
+                                                                <small>
+                                                                    <a href="" target="_blank"><i class="mdi mdi-paperclip"></i> Eliminar documento</a>
+                                                                </small>
+                                                            @endif
                                                         @endcan
                                                     </p>
                                                 </div>
@@ -192,6 +204,54 @@
         </div>
     </div>
 </div>
+
+<!-- Modal editar nota -->
+<div class="modal fade" id="editarNota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel1">Edición de nota</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('editarnotasolicitud')}}" method="POST">
+                    {{csrf_field()}}
+                    <div class="form-group" id="datos_nota_edicion">
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="borrarNota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel1">Eliminar nota</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('eliminarnotasolicitud')}}" method="POST">
+                    {{csrf_field()}}
+                    <div class="form-group" id="datos_eliminacion_nota">
+
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
 @endsection
 
 @section('js')
@@ -218,6 +278,38 @@
                 }
             });
             $('.textarea_description').wysihtml5();
+
+            $('.btn_edicion_nota').click(function (e) {
+                enlace = $(this).attr('href');
+                //console.log(enlace);
+                $('#datos_nota_edicion').html('Consultando información');
+                $.ajax({
+                    url: enlace,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#datos_nota_edicion').html(response);
+                    },
+                    errors:function (err) {
+                        console.log(err)
+                    }
+                })
+            })
+
+            $('.btn_eliminacion_nota').click(function (e) {
+                enlace = $(this).attr('href');
+                //console.log(enlace);
+                $('#datos_eliminacion_nota').html('Consultando información');
+                $.ajax({
+                    url: enlace,
+                    type: 'GET',
+                    success: function (response) {
+                        $('#datos_eliminacion_nota').html(response);
+                    },
+                    errors:function (err) {
+                        console.log(err)
+                    }
+                })
+            })
     });
     </script>
 @endsection

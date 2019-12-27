@@ -28,6 +28,10 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria');
 	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
 	Route::post('agregarnota','ControlController@agregarnota')->name('agregarnota');
+	Route::get('publicoprivado/{notasolicitud_id}','ControlController@publicoprivado')->name('publicoprivado');
+	Route::get('notasolicitud/{id}/{accion}','ControlController@notasolicitud')->name('notasolicitud');
+	Route::post('editarnotasolicitud','ControlController@editarnotasolicitud')->name('editarnotasolicitud');
+	Route::post('eliminarnotasolicitud','ControlController@eliminarnotasolicitud')->name('eliminarnotasolicitud');
 
 	//Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
