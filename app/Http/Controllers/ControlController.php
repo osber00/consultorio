@@ -2,6 +2,8 @@
 
 namespace Consultorio\Http\Controllers;
 
+use Consultorio\Models\Estado;
+use Consultorio\Models\Monitorsolicitud;
 use Illuminate\Http\Request;
 use Consultorio\Models\Notasolicitud;
 use Consultorio\Models\Solicitud;
@@ -31,7 +33,8 @@ class ControlController extends Controller
     	$categorias = Categoria::all();
     	$prioridades = Prioridad::all();
     	$notas = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->with('user')->get();
-    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas'));
+        $monitor = Monitorsolicitud::where('solicitud_id',$solicitud->id)->with(['accion','user'])->get();
+    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor'));
     }
 
     //Asignar estudiante practicante a una solicitud
@@ -41,6 +44,20 @@ class ControlController extends Controller
     		$solicitud->responsable_id = $responsable;
     		$solicitud->estado_id = 2;
     		$solicitud->save();
+    		$res = User::find($responsable);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 5,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $res->nombre
+            ]);
+            $estado = Estado::find(2);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 2,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $estado->estado
+            ]);
     		return back();
     	}else{
     		return back();
@@ -54,6 +71,13 @@ class ControlController extends Controller
     	if ($solicitud) {
     		$solicitud->revisor_id = $supervisor;
     		$solicitud->save();
+    		$supv = User::find($supervisor);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 6,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $supv->nombre
+            ]);
     		return back();
     	}else{
     		return back();
@@ -67,6 +91,13 @@ class ControlController extends Controller
     	if ($solicitud) {
     		$solicitud->categoria_id = $categoria;
     		$solicitud->save();
+    		$cat = Categoria::find($categoria);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 3,
+                'user_id'   => auth()->user()->id,
+                'detalles' => 'cambió a categoría '. $cat->categoria
+            ]);
     		return back();
     	}else{
     		return back();
@@ -80,6 +111,13 @@ class ControlController extends Controller
     	if ($solicitud) {
     		$solicitud->prioridad_id = $prioridad;
     		$solicitud->save();
+    		$pri = Prioridad::find($prioridad);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 4,
+                'user_id'   => auth()->user()->id,
+                'detalles' => 'cambió a prioridad '. $pri->prioridad
+            ]);
     		return back();
     	}else{
     		return back();
@@ -108,6 +146,14 @@ class ControlController extends Controller
                     $notasolicitud->publico = false;
                 }
                 $notasolicitud->save();
+                $num_nota = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->count();
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'notasolicitud_id' => $notasolicitud->id,
+                    'accion_id' => 7,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => 'Nota # '.$num_nota.', con archivo adjunto '
+                ]);
                 return back();
             }else{
             	//No formato
@@ -122,6 +168,14 @@ class ControlController extends Controller
                 $notasolicitud->publico = false;
             }
             $notasolicitud->save();
+            $num_nota = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->count();
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'notasolicitud_id' => $notasolicitud->id,
+                'accion_id' => 7,
+                'user_id'   => auth()->user()->id,
+                'detalles' => 'Nota # '.$num_nota
+            ]);
             return back();
     	}
     }
@@ -141,18 +195,39 @@ class ControlController extends Controller
     public function editarnotasolicitud(Request $request){
         $notasolicitud = Notasolicitud::find($request->get('nota_id'));
         if ($notasolicitud){
+            $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud->id)->first();
+            $solicitud = $request->get('solicitud_id');
             $notasolicitud->nota = $request->get('edicion_nota');
             $notasolicitud->save();
+
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud,
+                'accion_id' => 8,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $monitor_detalle->detalles. ' fue modificada'
+            ]);
             return back();
         }
     }
 
     //Marcar nota como privada o pública
-    public function publicoprivado(Request $request,$notasolicitud_id){
+    public function publicoprivado(Request $request,$notasolicitud_id,$solicitud){
         $notasolicitud = Notasolicitud::find($notasolicitud_id);
         if ($notasolicitud){
+            $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud_id)->first();
             $notasolicitud->publico = !$notasolicitud->publico;
             $notasolicitud->save();
+            if($notasolicitud->publico == 0){
+                $estado = 'nota privada';
+            }else{
+                $estado = 'nota pública';
+            }
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud,
+                'accion_id' => 8,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $monitor_detalle->detalles. ' cambió a '.$estado
+            ]);
             return back();
         }
     }

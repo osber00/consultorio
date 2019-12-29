@@ -2,6 +2,7 @@
 
 namespace Consultorio\Http\Controllers;
 
+use Consultorio\Models\Monitorsolicitud;
 use Illuminate\Http\Request;
 use Consultorio\Models\Solicitud;
 use Consultorio\Models\Notasolicitud;
@@ -29,9 +30,29 @@ class FrontController extends Controller
     	$solicitud->user_id = Auth::user()->id;
     	$solicitud->responsable_id = 1;
     	$solicitud->estado_id = 1;
-    	$solicitud->prioridad_id = 2;
+    	$solicitud->prioridad_id = 6;
     	$solicitud->categoria_id = 1;
     	$solicitud->save();
+
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 1,
+            'user_id'   => auth()->user()->id
+        ]);
+
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 2,
+            'user_id'   => 2,
+            'detalles' => 'Nueva'
+        ]);
+
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 5,
+            'user_id'   => 2,
+            'detalles' => 'Consultorio virtual'
+        ]);
     	$request->flash('paso2','Adjuntar documentos');
     	return redirect()->route('documentos',$solicitud->id);
     }
@@ -63,6 +84,16 @@ class FrontController extends Controller
 
                 //$tutorial->pdf = $guide;
                 //$tutorial->save();
+
+                $num_nota = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->count();
+
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'notasolicitud_id' => $notasolicitud->id,
+                    'accion_id' => 7,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => 'Nota # '.$num_nota.', con archivo adjunto'
+                ]);
 
                 $request->session()->flash('archivo','exito');
                 return redirect()->route('documentos',$solicitud->id);

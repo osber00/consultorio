@@ -140,9 +140,9 @@
                                                             <a href="{{route('notasolicitud',[$nota->id,'editar'])}}" data-toggle="modal" data-target="#editarNota" class="btn btn-dark btn-xs btn_edicion_nota">Editar</a>
                                                             <a href="{{route('notasolicitud',[$nota->id,'eliminar'])}}" data-toggle="modal" data-target="#borrarNota" class="btn btn-danger btn-xs btn_eliminacion_nota">Eliminar</a>
                                                             @if($nota->publico)
-                                                                <a href="{{route('publicoprivado',$nota->id)}}" class="btn btn-warning btn-xs">Hacer privada</a>
+                                                                <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-warning btn-xs">Hacer privada</a>
                                                             @else
-                                                                <a href="{{route('publicoprivado',$nota->id)}}" class="btn btn-success btn-xs">Hacer pública</a>
+                                                                <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-success btn-xs">Hacer pública</a>
                                                             @endif
 
                                                             @if($nota->archivo != null)
@@ -200,6 +200,17 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="col-xlg-10 col-lg-12 col-md-12">
+                    <div class="card-body">
+                        <h3 class="card-title">Monitor de actividades</h3>
+                        <ul>
+                            @foreach($monitor as $accion)
+                                <li>{{$accion->user->nombre}} - {{$accion->accion->accion}} - {{$accion->fecha->format('l j \\ F h:i:s a')}} <small>{{$accion->detalles}}</small></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -216,6 +227,7 @@
             <div class="modal-body">
                 <form action="{{route('editarnotasolicitud')}}" method="POST">
                     {{csrf_field()}}
+                    <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
                     <div class="form-group" id="datos_nota_edicion">
 
                     </div>

@@ -1,6 +1,7 @@
 <?php
 
 
+use Consultorio\Models\Accion;
 use Illuminate\Database\Seeder;
 use Consultorio\Models\Categoria;
 use Consultorio\Models\Prioridad;
@@ -21,10 +22,12 @@ class DatosTestSeeder extends Seeder
         $this->estados();
         $this->prioridad();
         $this->categorias();
-        $this->admin();        
-        $this->tutores();        
+        $this->admin();
+        $this->sistema();
+        $this->tutores();
         $this->estudiantes();
         $this->usuarios();
+        $this->acciones();
     }
 
     private function roles(){
@@ -56,7 +59,7 @@ class DatosTestSeeder extends Seeder
     }
 
     private function estados(){
-        for ($i=1; $i <=6 ; $i++) {
+        for ($i=1; $i <=7 ; $i++) {
             if($i==1){
                 Estado::create([
                     'estado' => 'nueva'
@@ -89,6 +92,12 @@ class DatosTestSeeder extends Seeder
 
             if($i==6){
                 Estado::create([
+                    'estado' => 'pausada'
+                ]);
+            }
+
+            if($i==7){
+                Estado::create([
                     'estado' => 'rechazada'
                 ]);
             }
@@ -96,7 +105,7 @@ class DatosTestSeeder extends Seeder
     }
 
     private function prioridad(){
-        for ($i=1; $i <=5 ; $i++) { 
+        for ($i=1; $i <=6 ; $i++) {
             if($i==1){
                 Prioridad::create([
                     'prioridad' => 'baja',
@@ -131,6 +140,13 @@ class DatosTestSeeder extends Seeder
                     'tiempo'    => '1'
                 ]);
             }
+
+            if($i==5){
+                Prioridad::create([
+                    'prioridad' => 'sin prioridad',
+                    'tiempo'    => '99'
+                ]);
+            }
         }
     }
 
@@ -146,7 +162,7 @@ class DatosTestSeeder extends Seeder
     private function admin()
     {
         User::create([
-            'nombre' => 'Administrador Consultorio Jurídico',
+            'nombre' => 'Consultorio Jurídico',
             'identificacion' => '123456',
             'telefono' => '3005577210',
             'rol_id'    => 1,
@@ -155,6 +171,20 @@ class DatosTestSeeder extends Seeder
             'password' => bcrypt('Cecar!"#')
         ]);
             
+    }
+
+    private function sistema()
+    {
+        User::create([
+            'nombre' => 'Sistema virtual',
+            'identificacion' => '000000',
+            'telefono' => '0000000000',
+            'rol_id'    => 1,
+            'email' => 'sistemavirtual@cecar.edu.co',
+            'activo' => true,
+            'password' => bcrypt('Cecar!"#')
+        ]);
+
     }
 
     private function tutores(){
@@ -196,6 +226,73 @@ class DatosTestSeeder extends Seeder
                 'activo' => true,
                 'password' => bcrypt('123456')
             ]);
+        }
+    }
+
+    private function acciones(){
+        for ($i=1; $i <= 10; $i++){
+            if ($i == 1){
+                Accion::create([
+                    'accion' => 'Creación',
+                    'notificable' => true
+                ]);
+            }
+            if ($i == 2){
+                Accion::create([
+                    'accion' => 'Estado'
+                ]);
+            }
+            if ($i == 3){
+                Accion::create([
+                    'accion' => 'Categoria'
+                ]);
+            }
+            if ($i == 4){
+                Accion::create([
+                    'accion' => 'Prioridad'
+                ]);
+            }
+            if ($i == 5){
+                Accion::create([
+                    'accion' => 'Responsable'
+                ]);
+            }
+            if ($i == 6){
+                Accion::create([
+                    'accion' => 'Revisor'
+                ]);
+            }
+            if ($i == 7){
+                Accion::create([
+                    'accion' => 'Creación de nota'
+                ]);
+            }
+            if ($i == 8){
+                Accion::create([
+                    'accion' => 'Edición de nota'
+                ]);
+            }
+            if ($i == 9){
+                Accion::create([
+                    'accion' => 'Eliminación de nota'
+                ]);
+            }
+            if ($i == 10){
+                Accion::create([
+                    'accion' => 'Notificación'
+                ]);
+            }
+            /*if ($i == 11){
+                Accion::create([
+                    'accion' => 'Asignación de prioridad'
+                ]);
+            }
+            if ($i == 12){
+                Accion::create([
+                    'accion' => 'Asignación de responsable',
+                    'notificable' => true
+                ]);
+            }*/
         }
     }
 

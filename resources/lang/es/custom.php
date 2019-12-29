@@ -14,8 +14,9 @@ return [
     'baja'     => 'light-primary',
     'normal'  => 'light-info',
     'alta' => 'light-warning',
-    'urgente' => 'light-danger',
-    'inmediata' => 'light-danger',
+    'urgente' => 'danger',
+    'inmediata' => 'danger',
+    'sin prioridad' => 'light-danger',
 
     //Iconos
 	'ic-nueva' 	=> '<i class="mdi mdi-bell-ring"></i>',
@@ -30,4 +31,5 @@ return [
     'ic-alta' => '<i class="mdi mdi-clock-alert"></i>',
     'ic-urgente' => '<i class="mdi mdi-clock-fast"></i>',
     'ic-inmediata' => '<i class="mdi mdi-camera-timer"></i>',
+    'ic-sin prioridad' => '<i class="mdi mdi-close"></i>',
 ];
