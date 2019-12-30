@@ -3,6 +3,7 @@
 namespace Consultorio\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Date\Date;
 
 class Notaeditada extends Model
 {
@@ -11,5 +12,10 @@ class Notaeditada extends Model
     public function notasolicitud()
     {
         return $this->belongsTo(Notasolicitud::class);
+    }
+
+    public function getFechaAttribute()
+    {
+        return new Date($this->created_at);
     }
 }

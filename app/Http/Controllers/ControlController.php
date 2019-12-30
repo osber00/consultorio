@@ -4,6 +4,7 @@ namespace Consultorio\Http\Controllers;
 
 use Consultorio\Models\Estado;
 use Consultorio\Models\Monitorsolicitud;
+use Consultorio\Models\Notaeditada;
 use Illuminate\Http\Request;
 use Consultorio\Models\Notasolicitud;
 use Consultorio\Models\Solicitud;
@@ -11,6 +12,7 @@ use Consultorio\Models\Prioridad;
 use Consultorio\Models\Categoria;
 use Consultorio\Models\User;
 use Auth;
+use function Sodium\increment;
 
 class ControlController extends Controller
 {
@@ -47,14 +49,14 @@ class ControlController extends Controller
     		$res = User::find($responsable);
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud->id,
-                'accion_id' => 5,
+                'accion_id' => 13,
                 'user_id'   => auth()->user()->id,
                 'detalles' => $res->nombre
             ]);
             $estado = Estado::find(2);
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud->id,
-                'accion_id' => 2,
+                'accion_id' => 10,
                 'user_id'   => auth()->user()->id,
                 'detalles' => $estado->estado
             ]);
@@ -94,7 +96,7 @@ class ControlController extends Controller
     		$cat = Categoria::find($categoria);
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud->id,
-                'accion_id' => 3,
+                'accion_id' => 11,
                 'user_id'   => auth()->user()->id,
                 'detalles' => 'cambió a categoría '. $cat->categoria
             ]);
@@ -195,10 +197,25 @@ class ControlController extends Controller
     public function editarnotasolicitud(Request $request){
         $notasolicitud = Notasolicitud::find($request->get('nota_id'));
         if ($notasolicitud){
+            $existeNotaEditada = Notaeditada::where('notasolicitud_id',$notasolicitud->id)->count();
+            if ($existeNotaEditada == 0){
+                Notaeditada::create([
+                    'notasolicitud_id' => $notasolicitud->id,
+                    'nota'  => $notasolicitud->nota
+                ]);
+            }
             $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud->id)->first();
             $solicitud = $request->get('solicitud_id');
             $notasolicitud->nota = $request->get('edicion_nota');
+            $notasolicitud->editada = true;
+            $notasolicitud->ediciones = $notasolicitud->ediciones +1;
             $notasolicitud->save();
+
+            Notaeditada::create([
+                'notasolicitud_id' => $notasolicitud->id,
+                'nota'  => $notasolicitud->nota
+            ]);
+
 
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud,
@@ -208,6 +225,13 @@ class ControlController extends Controller
             ]);
             return back();
         }
+    }
+
+    //Historial nota editada AJAX
+    public function historialnotaeditada($nota_id){
+        $notaseditadas = Notaeditada::where('notasolicitud_id',$nota_id)->orderBy('id','desc')->get();
+        return view('control.historialnota',compact('notaseditadas'));
+        //dd($notaseditadas);
     }
 
     //Marcar nota como privada o pública
@@ -236,8 +260,18 @@ class ControlController extends Controller
     public function eliminarnotasolicitud(Request $request){
         $notasolicitud = Notasolicitud::find($request->get('nota_id'));
         if ($notasolicitud){
+            $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud->id)->first();
+            $solicitud = $request->get('solicitud_id');
             $notasolicitud->eliminado = true;
             $notasolicitud->save();
+
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud,
+                'accion_id' => 9,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $monitor_detalle->detalles. ' fue eliminada'
+            ]);
+
             return back();
         }
     }

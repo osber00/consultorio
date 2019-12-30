@@ -230,7 +230,7 @@ class DatosTestSeeder extends Seeder
     }
 
     private function acciones(){
-        for ($i=1; $i <= 10; $i++){
+        for ($i=1; $i <= 14; $i++){
             if ($i == 1){
                 Accion::create([
                     'accion' => 'Creación',
@@ -279,20 +279,32 @@ class DatosTestSeeder extends Seeder
             }
             if ($i == 10){
                 Accion::create([
-                    'accion' => 'Notificación'
+                    'accion' => 'Modificación de estado'
                 ]);
             }
-            /*if ($i == 11){
+            if ($i == 11){
                 Accion::create([
-                    'accion' => 'Asignación de prioridad'
+                    'accion' => 'Modificación de categoría'
                 ]);
             }
             if ($i == 12){
                 Accion::create([
-                    'accion' => 'Asignación de responsable',
+                    'accion' => 'Modificación de prioridad',
                     'notificable' => true
                 ]);
-            }*/
+            }
+            if ($i == 13){
+                Accion::create([
+                    'accion' => 'Modificación de responsable',
+                    'notificable' => true
+                ]);
+            }
+            if ($i == 14){
+                Accion::create([
+                    'accion' => 'Modificación de revisor',
+                    'notificable' => true
+                ]);
+            }
         }
     }
 

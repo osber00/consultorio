@@ -32,8 +32,7 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::get('notasolicitud/{id}/{accion}','ControlController@notasolicitud')->name('notasolicitud');
 	Route::post('editarnotasolicitud','ControlController@editarnotasolicitud')->name('editarnotasolicitud');
 	Route::post('eliminarnotasolicitud','ControlController@eliminarnotasolicitud')->name('eliminarnotasolicitud');
-
-	//Route::post('modificarcategoria','ControlController@modificarcategoria')->name('modificarcategoria');
+    Route::get('historialnotaeditada/{nota_id}','ControlController@historialnotaeditada')->name('historialnotaeditada');
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
 });
 
