@@ -28,7 +28,7 @@ class FrontController extends Controller
     	$solicitud->titulo = $request->get('titulo');
     	$solicitud->descripcion = $request->get('descripcion');
     	$solicitud->user_id = Auth::user()->id;
-    	$solicitud->responsable_id = 1;
+    	$solicitud->manejador_id = 1;
     	$solicitud->estado_id = 1;
     	$solicitud->prioridad_id = 6;
     	$solicitud->categoria_id = 1;
@@ -49,7 +49,7 @@ class FrontController extends Controller
 
         Monitorsolicitud::create([
             'solicitud_id' => $solicitud->id,
-            'accion_id' => 5,
+            'accion_id' => 15,
             'user_id'   => 2,
             'detalles' => 'Consultorio virtual'
         ]);

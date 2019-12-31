@@ -24,6 +24,7 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::get('','ControlController@inicio')->name('admin');
 	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
 	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
+	Route::get('transferenciadecaso/{id}/{agente}','ControlController@transferenciadecaso')->name('transferenciadecaso');
 	Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor');
 	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria');
 	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
@@ -34,11 +35,15 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::post('eliminarnotasolicitud','ControlController@eliminarnotasolicitud')->name('eliminarnotasolicitud');
     Route::get('historialnotaeditada/{nota_id}','ControlController@historialnotaeditada')->name('historialnotaeditada');
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
+
+    Route::get('estudiante','ControlController@estudiante')->name('estudiante');
+    Route::get('aceptarsolicitud/{solicitud_id}','ControlController@aceptarsolicitud')->name('aceptarsolicitud');
+
 });
 
-Route::group(['prefix'=>'estudiante'],function (){
+/*Route::group(['prefix'=>'estudiante'],function (){
     Route::get('/', 'EstudianteController@inicio')->name('estudiante');
-});
+});*/
 
 Route::group(['prefix'=>'tutor'],function (){
     Route::get('/', 'TutorController@inicio')->name('tutor');

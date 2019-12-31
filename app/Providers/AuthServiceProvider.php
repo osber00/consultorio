@@ -3,7 +3,9 @@
 namespace Consultorio\Providers;
 
 use Consultorio\Models\Notasolicitud;
+use Consultorio\Models\User;
 use Consultorio\Policies\NotasolicitudPolicy;
+use Consultorio\Policies\UsuriorolPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -28,6 +30,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('isadmin',function ($user){
+            return $user->rol_id == 1;
+        });
+
+        Gate::define('istutor',function ($user){
+            return $user->rol_id == 2;
+        });
+
+        Gate::define('isestudiante',function ($user){
+            return $user->rol_id == 3;
+        });
+
+
     }
 }

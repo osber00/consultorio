@@ -45,13 +45,41 @@
 	                        @lang('custom.ic-'.$solicitud->prioridad->prioridad) {{$solicitud->prioridad->prioridad}}
 	                    </span>
                         <i class="mdi mdi-dots-vertical"></i>
-                        <small>Asignado: {{$solicitud->responsable->nombre}}, Supervisor: @if($solicitud->revisor){{$solicitud->revisor->nombre}}@endif</small>
+                        <small>
+                            Asignado:
+                            @if($solicitud->responsable)
+                                {{$solicitud->responsable->nombre}},
+                            @else
+                                <small class="text text-danger"><i class="mdi mdi-close-circle"></i> Sin asignación</small>
+                            @endif
+                            Supervisor:
+                            @if($solicitud->revisor)
+                                {{$solicitud->revisor->nombre}}
+                            @else
+                                <small class="text text-danger"><i class="mdi mdi-close-circle"></i> Sin revisor</small>
+                            @endif
+                        </small>
                         <i class="mdi mdi-dots-vertical"></i>
                         <small>{{$solicitud->categoria->categoria}}</small>
                     </p>
                     <p><b>Descripción de la solicitud</b></p>
                     <p>{{$solicitud->descripcion}}</p>
-
+                    <p>
+                        @can('isestudiante')
+                           @if($participacion_est >= 1)
+                            <div class="btn-group m-b-10" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Transferir solicitud
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
+                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
+                                </div>
+                            </div>
+                           @endif
+                        @endcan
+                    </p>
+                    @can('isadmin')
                     <div class="row">
                         <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
                             <div class="btn-group" role="group">
@@ -105,6 +133,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
 
                 </div>
                 <div>

@@ -75,7 +75,13 @@
                                             <td class="max-texts">
                                             	<a href="{{route('versolicitud',$solicitud->id)}}">
                                             		<span class="label label-@lang('custom.'.$solicitud->estado->estado) m-r-10">@lang('custom.ic-'.$solicitud->estado->estado) {{$solicitud->estado->estado}}</span> 
-	                                            	<small>Asignado: {{$solicitud->responsable->nombre}},</small>
+	                                            	<small>Asignación:
+                                                        @if($solicitud->responsable)
+                                                            {{$solicitud->responsable->nombre}},
+                                                        @else
+                                                            <small class="text text-danger">Sin asignación</small>
+                                                        @endif
+                                                    </small>
 	                                            	<span class="label label-@lang('custom.'.$solicitud->prioridad->prioridad)">
 	                                					@lang('custom.ic-'.$solicitud->prioridad->prioridad) {{$solicitud->prioridad->prioridad}}
 	                                				</span>

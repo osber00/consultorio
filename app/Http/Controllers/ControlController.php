@@ -2,6 +2,7 @@
 
 namespace Consultorio\Http\Controllers;
 
+use Consultorio\Models\Aceptarsolicitud;
 use Consultorio\Models\Estado;
 use Consultorio\Models\Monitorsolicitud;
 use Consultorio\Models\Notaeditada;
@@ -16,10 +17,14 @@ use function Sodium\increment;
 
 class ControlController extends Controller
 {
+    /*public function __construct(){
+        $this->middleware('guest')->except('logout');
+    }*/
+
     //Listado de solicitudes
     public function inicio(){
     	$solicitudes = Solicitud::where('eliminada',false)
-    			->with(['user','responsable','revisor','estado','prioridad','categoria'])
+    			->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
     			->orderBy('id','asc')
     			->get();
     	return view('control.inicio',compact('solicitudes'));
@@ -36,7 +41,17 @@ class ControlController extends Controller
     	$prioridades = Prioridad::all();
     	$notas = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->with('user')->get();
         $monitor = Monitorsolicitud::where('solicitud_id',$solicitud->id)->with(['accion','user'])->get();
-    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor'));
+        //mostrar solo si es estudiante
+        if(auth()->user()->rol_id == 3){
+            $aceptacion = Aceptarsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id])->count();
+            if ($aceptacion == 0){
+                return view('control.aceptacion', compact('solicitud'));
+            }
+            $participacion_est = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+        }else{
+            $participacion_est = null;
+        }
+    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est'));
     }
 
     //Asignar estudiante practicante a una solicitud
@@ -44,15 +59,27 @@ class ControlController extends Controller
     	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
     		$solicitud->responsable_id = $responsable;
+    		$solicitud->manejador_id = $responsable;
     		$solicitud->estado_id = 2;
     		$solicitud->save();
     		$res = User::find($responsable);
+    		//Responsable
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud->id,
-                'accion_id' => 13,
+                'accion_id' => 5,
                 'user_id'   => auth()->user()->id,
                 'detalles' => $res->nombre
             ]);
+
+            //A cargo
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 15,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $res->nombre
+            ]);
+
+            //Modificación de estado
             $estado = Estado::find(2);
             Monitorsolicitud::create([
                 'solicitud_id' => $solicitud->id,
@@ -60,11 +87,41 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => $estado->estado
             ]);
+
     		return back();
     	}else{
     		return back();
     	}
     	//dd($request->all());
+    }
+
+    public function transferenciadecaso(Request $request, $id, $agente){
+        $solicitud = Solicitud::find($id);
+
+        if ($agente == 'admin'){
+            $responsable = User::find(1);
+        }elseif ($agente == 'tutor'){
+            $responsable = User::find($solicitud->revisor_id);
+        }else{
+            $responsable = User::find($solicitud->responsable_id);
+        }
+        if ($solicitud) {
+            $solicitud->manejador_id = $responsable->id;
+            $solicitud->save();
+
+
+            //A cargo
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 15,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $responsable->nombre
+            ]);
+
+            return back();
+        }else{
+            return back();
+        }
     }
 
     //Asignar revisor a una solicitud
@@ -201,7 +258,8 @@ class ControlController extends Controller
             if ($existeNotaEditada == 0){
                 Notaeditada::create([
                     'notasolicitud_id' => $notasolicitud->id,
-                    'nota'  => $notasolicitud->nota
+                    'nota'  => $notasolicitud->nota,
+                    'created_at' => $notasolicitud->created_at
                 ]);
             }
             $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud->id)->first();
@@ -274,5 +332,39 @@ class ControlController extends Controller
 
             return back();
         }
+    }
+
+    //Acciones perfil Estudiante
+    public function estudiante(){
+        $solicitudes = Solicitud::where('eliminada',false)
+            ->where('responsable_id',auth()->user()->id)
+            ->with(['user','responsable','revisor','estado','prioridad','categoria'])
+            ->orderBy('id','asc')
+            ->get();
+        return view('control.inicio',compact('solicitudes'));
+    }
+
+    public function aceptarsolicitud(Request $request, $solicitud_id){
+        //$usuario = User::find(auth()->user()->id);
+        $solicitud = Solicitud::find($solicitud_id);
+        Aceptarsolicitud::create([
+            'user_id' => auth()->user()->id,
+            'solicitud_id' => $solicitud_id
+        ]);
+
+        //En proceso
+        $solicitud->estado_id = 3;
+        $solicitud->save();
+
+        //Modificación de estado
+        $estado = Estado::find(3);
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 10,
+            'user_id'   => auth()->user()->id,
+            'detalles' => $estado->estado
+        ]);
+
+        return redirect()->route('versolicitud',$solicitud->id);
     }
 }

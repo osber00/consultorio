@@ -10,6 +10,7 @@ class NotasolicitudPolicy
 {
     use HandlesAuthorization;
 
+    //Política de editar solo el propietario de la nota
     public function editar($user, Notasolicitud $notasolicitud){
         return $user->id == $notasolicitud->user_id;
     }

@@ -21,6 +21,10 @@ class Solicitud extends Model
     	return $this->belongsTo(User::class);
     }
 
+    public function manejador(){
+    	return $this->belongsTo(User::class);
+    }
+
     public function estado(){
     	return $this->belongsTo(Estado::class);
     }
