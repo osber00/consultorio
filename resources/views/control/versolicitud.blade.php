@@ -66,7 +66,7 @@
                     <p>{{$solicitud->descripcion}}</p>
                     <p>
                         @can('isestudiante')
-                           @if($participacion_est >= 1)
+                           @if($participacion_est >= 1 && $solicitud->manejador_id == auth()->user()->id)
                             <div class="btn-group m-b-10" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Transferir solicitud

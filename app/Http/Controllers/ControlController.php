@@ -13,6 +13,7 @@ use Consultorio\Models\Prioridad;
 use Consultorio\Models\Categoria;
 use Consultorio\Models\User;
 use Auth;
+use Illuminate\Support\Facades\Gate;
 use function Sodium\increment;
 
 class ControlController extends Controller
@@ -32,26 +33,30 @@ class ControlController extends Controller
 
     //Ver detalles de una solicitud
     public function versolicitud($id){
-    	$solicitud = Solicitud::where('id',$id)
-    			->with(['user','responsable','estado','prioridad','categoria'])
-    			->first();
-    	$estudiantes = User::where(['rol_id'=>3, 'activo' => 1])->get();
-    	$tutores = User::where(['rol_id'=>2, 'activo' => 1])->get();
-    	$categorias = Categoria::all();
-    	$prioridades = Prioridad::all();
-    	$notas = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->with('user')->get();
-        $monitor = Monitorsolicitud::where('solicitud_id',$solicitud->id)->with(['accion','user'])->get();
-        //mostrar solo si es estudiante
-        if(auth()->user()->rol_id == 3){
-            $aceptacion = Aceptarsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id])->count();
-            if ($aceptacion == 0){
-                return view('control.aceptacion', compact('solicitud'));
+        $solicitud = Solicitud::where('id',$id)
+            ->with(['user','responsable','estado','prioridad','categoria'])
+            ->first();
+        if (Gate::allows('versolicitud',$solicitud)){
+            $estudiantes = User::where(['rol_id'=>3, 'activo' => 1])->get();
+            $tutores = User::where(['rol_id'=>2, 'activo' => 1])->get();
+            $categorias = Categoria::all();
+            $prioridades = Prioridad::all();
+            $notas = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->with('user')->get();
+            $monitor = Monitorsolicitud::where('solicitud_id',$solicitud->id)->with(['accion','user'])->get();
+            //mostrar solo si es estudiante
+            if(auth()->user()->rol_id == 3){
+                $aceptacion = Aceptarsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id])->count();
+                if ($aceptacion == 0){
+                    return view('control.aceptacion', compact('solicitud'));
+                }
+                $participacion_est = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+            }else{
+                $participacion_est = null;
             }
-            $participacion_est = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est'));
         }else{
-            $participacion_est = null;
+    	    return back();
         }
-    	return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est'));
     }
 
     //Asignar estudiante practicante a una solicitud
@@ -97,7 +102,6 @@ class ControlController extends Controller
 
     public function transferenciadecaso(Request $request, $id, $agente){
         $solicitud = Solicitud::find($id);
-
         if ($agente == 'admin'){
             $responsable = User::find(1);
         }elseif ($agente == 'tutor'){
@@ -108,7 +112,6 @@ class ControlController extends Controller
         if ($solicitud) {
             $solicitud->manejador_id = $responsable->id;
             $solicitud->save();
-
 
             //A cargo
             Monitorsolicitud::create([

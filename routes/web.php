@@ -23,11 +23,11 @@ Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('ad
 Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 	Route::get('','ControlController@inicio')->name('admin');
 	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
-	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
+	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable')->middleware('isAdmin');
 	Route::get('transferenciadecaso/{id}/{agente}','ControlController@transferenciadecaso')->name('transferenciadecaso');
-	Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor');
-	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria');
-	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
+	Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor')->middleware('isAdmin');
+	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria')->middleware('isAdmin');
+	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad')->middleware('isAdmin');
 	Route::post('agregarnota','ControlController@agregarnota')->name('agregarnota');
 	Route::get('publicoprivado/{notasolicitud_id}/{solicitud}','ControlController@publicoprivado')->name('publicoprivado');
 	Route::get('notasolicitud/{id}/{accion}','ControlController@notasolicitud')->name('notasolicitud');

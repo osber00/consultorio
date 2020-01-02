@@ -3,8 +3,10 @@
 namespace Consultorio\Providers;
 
 use Consultorio\Models\Notasolicitud;
+use Consultorio\Models\Solicitud;
 use Consultorio\Models\User;
 use Consultorio\Policies\NotasolicitudPolicy;
+use Consultorio\Policies\SolicitudPolicy;
 use Consultorio\Policies\UsuriorolPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -18,7 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         //'Consultorio\Model' => 'Consultorio\Policies\ModelPolicy',
-        Notasolicitud::class => NotasolicitudPolicy::class
+        Notasolicitud::class => NotasolicitudPolicy::class,
+        Solicitud::class => SolicitudPolicy::class
     ];
 
     /**
