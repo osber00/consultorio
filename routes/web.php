@@ -39,15 +39,16 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
     Route::get('estudiante','ControlController@estudiante')->name('estudiante');
     Route::get('aceptarsolicitud/{solicitud_id}','ControlController@aceptarsolicitud')->name('aceptarsolicitud');
 
+    Route::get('revisor','ControlController@revisor')->name('revisor');
 });
 
 /*Route::group(['prefix'=>'estudiante'],function (){
     Route::get('/', 'EstudianteController@inicio')->name('estudiante');
 });*/
 
-Route::group(['prefix'=>'tutor'],function (){
+/*Route::group(['prefix'=>'tutor'],function (){
     Route::get('/', 'TutorController@inicio')->name('tutor');
-});
+});*/
 
 Route::get('nota/documento/{id}','AssetController@notadocumento')->name('notadocumento');
 

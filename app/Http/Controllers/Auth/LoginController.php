@@ -51,7 +51,7 @@ class LoginController extends Controller
         if (auth()->user()->rol_id == '1') {
             return property_exists($this, 'redirectTo') ? $this->redirectTo : '/control';
         }else if (auth()->user()->rol_id == '2') {
-            return property_exists($this, 'redirectTo') ? $this->redirectTo : 'control/tutor';
+            return property_exists($this, 'redirectTo') ? $this->redirectTo : 'control/revisor';
         }else if (auth()->user()->rol_id == '3') {
             return property_exists($this, 'redirectTo') ? $this->redirectTo : 'control/estudiante';
         }

@@ -28,13 +28,15 @@ class ControlController extends Controller
     			->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
     			->orderBy('id','asc')
     			->get();
+
+    	//dd($solicitudes);
     	return view('control.inicio',compact('solicitudes'));
     }
 
     //Ver detalles de una solicitud
     public function versolicitud($id){
         $solicitud = Solicitud::where('id',$id)
-            ->with(['user','responsable','estado','prioridad','categoria'])
+            ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
             ->first();
         if (Gate::allows('versolicitud',$solicitud)){
             $estudiantes = User::where(['rol_id'=>3, 'activo' => 1])->get();
@@ -53,7 +55,12 @@ class ControlController extends Controller
             }else{
                 $participacion_est = null;
             }
-            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est'));
+            if(auth()->user()->rol_id == 2){
+                $participacion_tut = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+            }else{
+                $participacion_tut = null;
+            }
+            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut'));
         }else{
     	    return back();
         }
@@ -104,13 +111,38 @@ class ControlController extends Controller
         $solicitud = Solicitud::find($id);
         if ($agente == 'admin'){
             $responsable = User::find(1);
+            $estado = Estado::find(6);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 10,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $estado->estado
+            ]);
         }elseif ($agente == 'tutor'){
             $responsable = User::find($solicitud->revisor_id);
+            //estado
+            $estado = Estado::find(4);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 10,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $estado->estado
+            ]);
         }else{
             $responsable = User::find($solicitud->responsable_id);
+            //estado
+            $estado = Estado::find(3);
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 10,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $estado->estado
+            ]);
         }
+
         if ($solicitud) {
             $solicitud->manejador_id = $responsable->id;
+            $solicitud->estado_id = $estado->id;
             $solicitud->save();
 
             //A cargo
@@ -245,6 +277,7 @@ class ControlController extends Controller
     //Consulta ajax de contenido de una nota
     public function notasolicitud($id,$accion){
         $notasolicitud = Notasolicitud::find($id);
+        dd($notasolicitud);
         sleep(1);
         if ($accion == 'editar'){
             return view('control.edicion_nota',compact('notasolicitud'));
@@ -369,5 +402,15 @@ class ControlController extends Controller
         ]);
 
         return redirect()->route('versolicitud',$solicitud->id);
+    }
+
+    //Acciones perfil Tutor
+    public function revisor(){
+        $solicitudes = Solicitud::where('eliminada',false)
+            ->where('revisor_id',auth()->user()->id)
+            ->with(['user','responsable','revisor','estado','prioridad','categoria'])
+            ->orderBy('id','asc')
+            ->get();
+        return view('control.inicio',compact('solicitudes'));
     }
 }
