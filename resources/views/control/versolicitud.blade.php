@@ -115,76 +115,79 @@
 
                     </p>
                     @can('isadmin')
-                    <div class="row">
-                        <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-chart-arc font-18 "></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @foreach($categorias as $categoria)
-                                        <a class="dropdown-item @if($categoria->id == $solicitud->categoria_id) active @endif" href="{{route('modificarcategoria',[$solicitud->id,$categoria->id])}}">
-                                            {{$categoria->categoria}}
-                                        </a>
-                                    @endforeach
+                        @can('solicitudabierta',$solicitud)
+                            <div class="row">
+                                <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-chart-arc font-18 "></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @foreach($categorias as $categoria)
+                                                <a class="dropdown-item @if($categoria->id == $solicitud->categoria_id) active @endif" href="{{route('modificarcategoria',[$solicitud->id,$categoria->id])}}">
+                                                    {{$categoria->categoria}}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-calendar-clock font-18"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @foreach($prioridades as $prioridad)
+                                                <a class="dropdown-item @if($prioridad->id == $solicitud->prioridad_id) active @endif" href="{{route('modificarprioridad',[$solicitud->id,$prioridad->id])}}">{{$prioridad->prioridad}} ({{$prioridad->tiempo}})</a>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-calendar-clock font-18"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @foreach($prioridades as $prioridad)
-                                        <a class="dropdown-item @if($prioridad->id == $solicitud->prioridad_id) active @endif" href="{{route('modificarprioridad',[$solicitud->id,$prioridad->id])}}">{{$prioridad->prioridad}} ({{$prioridad->tiempo}})</a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-account-multiple-plus font-18 "></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @foreach($estudiantes as $estudiante)
-                                        <a class="dropdown-item @if($estudiante->id == $solicitud->responsable_id) active @endif" href="{{route('asignaresponsable',[$solicitud->id,$estudiante->id])}}">
-                                            {{$estudiante->nombre}}
-                                        </a>
-                                    @endforeach
+                                <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-account-multiple-plus font-18 "></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @foreach($estudiantes as $estudiante)
+                                                <a class="dropdown-item @if($estudiante->id == $solicitud->responsable_id) active @endif" href="{{route('asignaresponsable',[$solicitud->id,$estudiante->id])}}">
+                                                    {{$estudiante->nombre}}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="mdi mdi-account-star font-18"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @foreach($tutores as $tutor)
+                                                <a class="dropdown-item @if($tutor->id == $solicitud->revisor_id) active @endif" href="{{route('asignarsupervisor',[$solicitud->id,$tutor->id])}}">
+                                                    {{$tutor->nombre}}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    </div>
                                 </div>
+                                @if($solicitud->manejador_id == auth()->user()->id)
+                                    <div class="btn-group m-b-10" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Transferir solicitud
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
+                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
-                            <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-account-star font-18"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    @foreach($tutores as $tutor)
-                                        <a class="dropdown-item @if($tutor->id == $solicitud->revisor_id) active @endif" href="{{route('asignarsupervisor',[$solicitud->id,$tutor->id])}}">
-                                            {{$tutor->nombre}}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                        @if($solicitud->manejador_id == auth()->user()->id)
-                            <div class="btn-group m-b-10" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Transferir solicitud
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
-                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
+                        @endcan
                     @endcan
 
                 </div>
                 <div>
                     <hr class="m-t-0">
                 </div>
+
                 <div class="col-xlg-10 col-lg-12 col-md-12">
                     <div class="card-body">
                         <h3 class="card-title">Notas del caso</h3>
@@ -290,7 +293,44 @@
                     </div>
                 </div>
                 @endcan
-                <div class="col-xlg-10 col-lg-12 col-md-12">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Monitor de actividades</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Acción</th>
+                                        <th>Detalle</th>
+                                        <th>Fecha</th>
+                                        <th>Tiempo</th>
+                                        {{--<th>Country</th>--}}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($monitor as $accion)
+                                    <tr>
+                                        <td>
+                                            <a href="javascript:void(0)"><small>{{$accion->user->nombre}}</small></a>
+                                        </td>
+                                        <td><small>{{$accion->accion->accion}}</small></td>
+                                        <td><span class="text-muted"><small>{{$accion->detalles}}</small></span> </td>
+                                        <td><small>{{$accion->fecha->format('l j \\ F h:i:s a')}}</small></td>
+                                        <td>
+                                            <div class="label label-table label-inverse">{{$accion->fecha->diffForHumans($solicitud->fecha)}}</div>
+                                        </td>
+                                        {{--<td>EN</td>--}}
+                                    </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{--<div class="col-xlg-10 col-lg-12 col-md-12">
                     <div class="card-body">
                         <h3 class="card-title">Monitor de actividades</h3>
                         <ul>
@@ -299,7 +339,7 @@
                             @endforeach
                         </ul>
                     </div>
-                </div>
+                </div>--}}
             </div>
         </div>
     </div>

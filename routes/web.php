@@ -21,13 +21,31 @@ Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('docu
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
 
 Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
-	Route::get('','ControlController@inicio')->name('admin');
-	Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
-	Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable')->middleware('isAdmin');
+
+    //Solo admin
+    Route::group(['middleware'=>'isAdmin'], function (){
+        Route::get('','ControlController@inicio')->name('admin');
+        Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor');
+        Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria');
+        Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
+        Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
+    });
+
+    Route::group(['middleware'=>'isEst'],function (){
+        Route::get('estudiante','ControlController@estudiante')->name('estudiante');
+        Route::get('aceptarsolicitud/{solicitud_id}','ControlController@aceptarsolicitud')->name('aceptarsolicitud');
+        Route::get('cerrarsolicitud/{solicitud_id}','ControlController@cerrarsolicitud')->name('cerrarsolicitud');
+    });
+
+    Route::group(['middleware'=>'isRevisor'],function (){
+        Route::get('revisor','ControlController@revisor')->name('revisor');
+        Route::get('autorizacioncierre/{solicitud_id}','ControlController@autorizacioncierre')->name('autorizacioncierre');
+    });
+
+
+    Route::get('versolicitud/{id}','ControlController@versolicitud')->name('versolicitud');
 	Route::get('transferenciadecaso/{id}/{agente}','ControlController@transferenciadecaso')->name('transferenciadecaso');
-	Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor')->middleware('isAdmin');
-	Route::get('modificarcategoria/{id}/{categoria}','ControlController@modificarcategoria')->name('modificarcategoria')->middleware('isAdmin');
-	Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad')->middleware('isAdmin');
+
 	Route::post('agregarnota','ControlController@agregarnota')->name('agregarnota');
 	Route::get('publicoprivado/{notasolicitud_id}/{solicitud}','ControlController@publicoprivado')->name('publicoprivado');
 	Route::get('notasolicitud/{id}/{accion}','ControlController@notasolicitud')->name('notasolicitud');
@@ -36,21 +54,9 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
     Route::get('historialnotaeditada/{nota_id}','ControlController@historialnotaeditada')->name('historialnotaeditada');
 	//Route::post('modificarprioridad','ControlController@modificarprioridad')->name('modificarprioridad');
 
-    Route::get('estudiante','ControlController@estudiante')->name('estudiante');
-    Route::get('aceptarsolicitud/{solicitud_id}','ControlController@aceptarsolicitud')->name('aceptarsolicitud');
-    Route::get('cerrarsolicitud/{solicitud_id}','ControlController@cerrarsolicitud')->name('cerrarsolicitud');
-
-    Route::get('revisor','ControlController@revisor')->name('revisor');
-    Route::get('autorizacioncierre/{solicitud_id}','ControlController@autorizacioncierre')->name('autorizacioncierre');
 });
 
-/*Route::group(['prefix'=>'estudiante'],function (){
-    Route::get('/', 'EstudianteController@inicio')->name('estudiante');
-});*/
 
-/*Route::group(['prefix'=>'tutor'],function (){
-    Route::get('/', 'TutorController@inicio')->name('tutor');
-});*/
 
 Route::get('nota/documento/{id}','AssetController@notadocumento')->name('notadocumento');
 
