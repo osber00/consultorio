@@ -38,8 +38,10 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 
     Route::get('estudiante','ControlController@estudiante')->name('estudiante');
     Route::get('aceptarsolicitud/{solicitud_id}','ControlController@aceptarsolicitud')->name('aceptarsolicitud');
+    Route::get('cerrarsolicitud/{solicitud_id}','ControlController@cerrarsolicitud')->name('cerrarsolicitud');
 
     Route::get('revisor','ControlController@revisor')->name('revisor');
+    Route::get('autorizacioncierre/{solicitud_id}','ControlController@autorizacioncierre')->name('autorizacioncierre');
 });
 
 /*Route::group(['prefix'=>'estudiante'],function (){

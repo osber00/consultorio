@@ -8,7 +8,7 @@ return [
     'asignada' 	=> 'info',
     'en proceso' => 'warning',
     'en revisión' => 'danger',
-    'resuelta' => 'megna',
+    'resuelta' => 'inverse',
     'pausada' => 'inverse',
     'rechazada' => 'danger',
 

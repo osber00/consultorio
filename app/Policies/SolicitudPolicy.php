@@ -16,4 +16,8 @@ class SolicitudPolicy
                 $user->id == $solicitud->revisor_id ||
                 $user->id == 1;
     }
+
+    public function solicitudabierta($user, Solicitud $solicitud){
+        return $solicitud->estado_id != 5;
+    }
 }

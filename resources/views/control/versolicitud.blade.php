@@ -63,38 +63,56 @@
                                 <small class="text text-danger"><i class="mdi mdi-close-circle"></i> Sin revisor</small>
                             @endif
                             <i class="mdi mdi-dots-vertical"></i>
-                            <small class="label label-inverse"> Manejo de solicitud: <strong>{{$solicitud->manejador->nombre}}</strong></small>
+                            <small class="label label-inverse"> Manejo de solicitud:
+                                @if($solicitud->manejador->id == auth()->user()->id)
+                                    <strong> <i class="mdi mdi-account"></i> YO</strong>
+                                @else
+                                    <strong>{{$solicitud->manejador->nombre}}</strong>
+                                @endif
+                            </small>
                         </small>
                     </p>
                     <p><b>Descripción de la solicitud</b></p>
                     <p>{{$solicitud->descripcion}}</p>
                     <p>
+
                     @can('isestudiante')
-                       @if($participacion_est >= 1 && $solicitud->manejador_id == auth()->user()->id)
-                        <div class="btn-group m-b-10" role="group">
-                            <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Transferir solicitud
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
-                                <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
-                            </div>
-                        </div>
-                       @endif
-                    @endcan
-                    @can('istutor')
-                        @if($participacion_tut >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                        @can('solicitudabierta',$solicitud)
+                            @if($participacion_est >= 1 && $solicitud->manejador_id == auth()->user()->id)
                             <div class="btn-group m-b-10" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Transferir solicitud
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Para ajustes</a>
+                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
                                     <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
                                 </div>
                             </div>
-                        @endif
+                            @endif
+                            <br>
+                            @if($participacion_est >= 1 && $auth_tutor >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                                <a href="{{route('cerrarsolicitud',$solicitud->id)}}" class="btn btn-success">Marcar como solicitud resuelta</a>
+                            @endif
+                        @endcan
                     @endcan
+
+                    @can('istutor')
+                        @can('solicitudabierta',$solicitud)
+                            @if($participacion_tut >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                                <div class="btn-group m-b-10" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Transferir solicitud
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Para ajustes</a>
+                                        <a class="dropdown-item" href="{{route('autorizacioncierre',$solicitud->id)}}">Autorización para cerrar</a>
+                                        <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
+                                    </div>
+                                </div>
+                            @endif
+                        @endcan
+                    @endcan
+
                     </p>
                     @can('isadmin')
                     <div class="row">
@@ -180,7 +198,13 @@
                                         <div>
                                             <small class="text text-danger">Nota {{$loop->index +1}}</small>
                                             <a href="#" class="link">
-                                                <small><strong>{{$nota->user->nombre}}</strong></small>
+                                                <small>
+                                                    @if($nota->user->id == auth()->user()->id)
+                                                        <strong><i class="mdi mdi-account-check"></i> YO</strong>
+                                                    @else
+                                                        <strong><i class="mdi mdi-account"></i> {{$nota->user->nombre}}</strong>
+                                                    @endif
+                                                </small>
                                             </a>
                                             <span class="sl-date">{{$nota->fecha->format('l j \\ F h:i:s a')}}</span>
                                             <div class="m-t-20 row">
@@ -195,19 +219,22 @@
                                                         @endif
                                                         <br>
                                                         @can('editar',$nota)
-                                                            <a href="{{route('notasolicitud',[$nota->id,'editar'])}}" data-toggle="modal" data-target="#editarNota" class="btn btn-dark btn-xs btn_edicion_nota">Editar</a>
-                                                            {{--<a href="{{route('notasolicitud',[$nota->id,'eliminar'])}}" data-toggle="modal" data-target="#borrarNota" class="btn btn-danger btn-xs btn_eliminacion_nota">Eliminar</a>--}}
-                                                            @if($nota->publico)
-                                                                <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-warning btn-xs">Hacer privada</a>
-                                                            @else
-                                                                <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-success btn-xs">Hacer pública</a>
-                                                            @endif
+                                                            @can('solicitudabierta',$solicitud)
+                                                                <a href="{{route('notasolicitud',[$nota->id,'editar'])}}" data-toggle="modal" data-target="#editarNota" class="btn btn-dark btn-xs btn_edicion_nota">Editar</a>
 
-                                                            @if($nota->archivo != null)
-                                                                <small>
-                                                                    <a href="" target="_blank"><i class="mdi mdi-paperclip"></i> Eliminar documento</a>
-                                                                </small>
-                                                            @endif
+                                                                {{--<a href="{{route('notasolicitud',[$nota->id,'eliminar'])}}" data-toggle="modal" data-target="#borrarNota" class="btn btn-danger btn-xs btn_eliminacion_nota">Eliminar</a>--}}
+                                                                @if($nota->publico)
+                                                                    <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-warning btn-xs">Hacer privada</a>
+                                                                @else
+                                                                    <a href="{{route('publicoprivado',[$nota->id, $solicitud->id])}}" class="btn btn-success btn-xs">Hacer pública</a>
+                                                                @endif
+
+                                                                @if($nota->archivo != null)
+                                                                    <small>
+                                                                        <a href="" target="_blank"><i class="mdi mdi-paperclip"></i> Eliminar documento</a>
+                                                                    </small>
+                                                                @endif
+                                                            @endcan
                                                         @endcan
                                                         @if($nota->editada)
                                                             <a href="{{route('historialnotaeditada',$nota->id)}}" data-toggle="modal" data-target="#historialNota" class="btn btn-primary btn-xs btn_historial_nota">Nota editada</a>
@@ -240,6 +267,7 @@
                         </ul>--}}
                     </div>
                 </div>
+                @can('solicitudabierta',$solicitud)
                 <div class="col-xlg-10 col-lg-12 col-md-12">
                     <div class="card-body">
                         <h3 class="card-title">Agregar nota</h3>
@@ -261,7 +289,7 @@
                         </form>
                     </div>
                 </div>
-
+                @endcan
                 <div class="col-xlg-10 col-lg-12 col-md-12">
                     <div class="card-body">
                         <h3 class="card-title">Monitor de actividades</h3>

@@ -230,7 +230,7 @@ class DatosTestSeeder extends Seeder
     }
 
     private function acciones(){
-        for ($i=1; $i <= 15; $i++){
+        for ($i=1; $i <= 16; $i++){
             if ($i == 1){
                 Accion::create([
                     'accion' => 'Creación',
@@ -308,6 +308,12 @@ class DatosTestSeeder extends Seeder
             if ($i == 15){
                 Accion::create([
                     'accion' => 'Solicitud en manos de ',
+                    'notificable' => true
+                ]);
+            }
+            if ($i == 16){
+                Accion::create([
+                    'accion' => 'Autorización para cerrar caso ',
                     'notificable' => true
                 ]);
             }

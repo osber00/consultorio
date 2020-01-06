@@ -4,6 +4,8 @@ namespace Consultorio\Http\Controllers\Auth;
 
 use Consultorio\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+
 
 class LoginController extends Controller
 {
@@ -61,12 +63,23 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the login username to be used by the controller.
+     * Estado activo para acceder al sistema
+     */
+    protected function credentials(Request $request)
+    {
+        $request['activo'] = 1;
+        return $request->only($this->username(), 'password', 'activo');
+    }
+
+    /**
+     * Campo habilitado para acceder al sistema "Identificacion"
      *
-     * @return string
      */
     public function username()
     {
         return 'identificacion';
     }
+
+
+
 }

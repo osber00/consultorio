@@ -131,7 +131,13 @@
                 <ul id="sidebarnav">
                     <li class="nav-small-cap">MENÚ</li>
                     <li>
-                        <a class="waves-effect waves-dark" href="{{route('admin')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Inicio </span></a>
+                        @if(auth()->user()->rol_id == 1)
+                            <a class="waves-effect waves-dark" href="{{route('admin')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Inicio </span></a>
+                        @elseif(auth()->user()->rol_id == 2)
+                            <a class="waves-effect waves-dark" href="{{route('revisor')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Inicio </span></a>
+                        @else
+                            <a class="waves-effect waves-dark" href="{{route('estudiante')}}" aria-expanded="false"><i class="mdi mdi-settings"></i><span class="hide-menu">Inicio </span></a>
+                        @endif
                     </li>
                     <li>
                         <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Estudiantes</span></a>

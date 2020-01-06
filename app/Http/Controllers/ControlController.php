@@ -51,16 +51,19 @@ class ControlController extends Controller
                 if ($aceptacion == 0){
                     return view('control.aceptacion', compact('solicitud'));
                 }
-                $participacion_est = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+                $participacion_est = Notasolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id])->count();
+
             }else{
                 $participacion_est = null;
             }
+            //Si es tutor
             if(auth()->user()->rol_id == 2){
-                $participacion_tut = Monitorsolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id,'accion_id'=>7])->count();
+                $participacion_tut = Notasolicitud::where(['user_id'=>auth()->user()->id,'solicitud_id'=>$solicitud->id])->count();
             }else{
                 $participacion_tut = null;
             }
-            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut'));
+            $auth_tutor = Monitorsolicitud::where(['user_id'=>$solicitud->revisor_id,'solicitud_id'=>$solicitud->id,'accion_id'=>16])->count();
+            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut','auth_tutor'));
         }else{
     	    return back();
         }
@@ -107,6 +110,7 @@ class ControlController extends Controller
     	//dd($request->all());
     }
 
+    //Transferencia de manejador del caso
     public function transferenciadecaso(Request $request, $id, $agente){
         $solicitud = Solicitud::find($id);
         if ($agente == 'admin'){
@@ -156,6 +160,68 @@ class ControlController extends Controller
             return back();
         }else{
             return back();
+        }
+    }
+
+    //Autorización para cerrar caso
+    public function autorizacioncierre(Request $request, $solicitud_id){
+
+        $estado = Estado::find(3); //En proceso
+        $solicitud = Solicitud::find($solicitud_id);
+        $solicitud->manejador_id = $solicitud->responsable_id;
+        $solicitud->estado_id = $estado->id;
+        $solicitud->save();
+
+        $responsable = User::find($solicitud->responsable_id);
+
+        //Estado
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 10,
+            'user_id'   => auth()->user()->id,
+            'detalles' => $estado->estado
+        ]);
+
+        //A cargo
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 15,
+            'user_id'   => auth()->user()->id,
+            'detalles' => $responsable->nombre
+        ]);
+
+        //A cargo
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 16,
+            'user_id'   => auth()->user()->id
+        ]);
+
+        return back();
+
+
+    }
+
+    public function cerrarsolicitud(Request $request, $solicitud_id){
+        $solicitud = Solicitud::find($solicitud_id);
+        if (Gate::allows('versolicitud',$solicitud)){
+            $estado = Estado::find(5);
+            //Cambio de estado
+            $solicitud->estado_id = $estado->id;
+            $solicitud->save();
+
+            //Reportar en monitor estado
+            Monitorsolicitud::create([
+                'solicitud_id' => $solicitud->id,
+                'accion_id' => 10,
+                'user_id'   => auth()->user()->id,
+                'detalles' => $estado->estado
+            ]);
+
+            return back();
+
+        }else{
+            return "No permitido";
         }
     }
 
@@ -277,7 +343,7 @@ class ControlController extends Controller
     //Consulta ajax de contenido de una nota
     public function notasolicitud($id,$accion){
         $notasolicitud = Notasolicitud::find($id);
-        dd($notasolicitud);
+        //dd($notasolicitud);
         sleep(1);
         if ($accion == 'editar'){
             return view('control.edicion_nota',compact('notasolicitud'));
