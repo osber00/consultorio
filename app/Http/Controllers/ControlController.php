@@ -34,7 +34,7 @@ class ControlController extends Controller
     }
 
     //Ver detalles de una solicitud
-    public function versolicitud($id){
+    public function versolicitud(Request $request, $id){
         $solicitud = Solicitud::where('id',$id)
             ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
             ->first();
@@ -63,6 +63,7 @@ class ControlController extends Controller
                 $participacion_tut = null;
             }
             $auth_tutor = Monitorsolicitud::where(['user_id'=>$solicitud->revisor_id,'solicitud_id'=>$solicitud->id,'accion_id'=>16])->count();
+
             return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut','auth_tutor'));
         }else{
     	    return back();
@@ -102,6 +103,8 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => $estado->estado
             ]);
+
+            $request->session()->flash('responsable','responsable');
 
     		return back();
     	}else{
@@ -238,6 +241,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => $supv->nombre
             ]);
+            $request->session()->flash('revisor','revisor');
     		return back();
     	}else{
     		return back();
@@ -258,6 +262,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => 'cambió a categoría '. $cat->categoria
             ]);
+            $request->session()->flash('categoria',$cat->categoria);
     		return back();
     	}else{
     		return back();
@@ -278,6 +283,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => 'cambió a prioridad '. $pri->prioridad
             ]);
+            $request->session()->flash('prioridad',$pri->prioridad);
     		return back();
     	}else{
     		return back();
@@ -288,12 +294,17 @@ class ControlController extends Controller
     public function agregarnota(Request $request){
     	$solicitud = Solicitud::find($request->get('solicitud_id'));
     	//dd($request->all());
+        $rule = [
+            'nota' => 'required|min:5|max:500'
+        ];
     	if ($request->hasFile('archivo')) {
     		 $ext    = $request->file('archivo')->getClientOriginalExtension();
             str_slug($ext);
             if ($ext=='pdf' || $ext == 'jpg' || $ext == 'png'){
                 //Salvar archivo en public de storage
                 $ruta = $request->archivo->store($solicitud->id);
+
+                $this->validate($request,$rule);
 
                 //dd($numDocNotas);
                 $notasolicitud = new Notasolicitud();
@@ -314,12 +325,16 @@ class ControlController extends Controller
                     'user_id'   => auth()->user()->id,
                     'detalles' => 'Nota # '.$num_nota.', con archivo adjunto '
                 ]);
+                $request->session()->flash('nota-archivo','Nota # '.$num_nota);
                 return back();
             }else{
-            	//No formato
+                //no formato
+                $request->session()->flash('no-formato','no-formato');
+                return back();
             	
             }
     	}else{
+            $this->validate($request,$rule);
     		$notasolicitud = new Notasolicitud();
             $notasolicitud->nota = $request->get('nota');
             $notasolicitud->user_id = Auth::user()->id;
@@ -336,6 +351,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => 'Nota # '.$num_nota
             ]);
+            $request->session()->flash('nota-normal','Nota # '.$num_nota);
             return back();
     	}
     }
@@ -383,6 +399,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => $monitor_detalle->detalles. ' fue modificada'
             ]);
+            $request->session()->flash('nota-editada',$monitor_detalle->detalles);
             return back();
         }
     }
@@ -412,6 +429,7 @@ class ControlController extends Controller
                 'user_id'   => auth()->user()->id,
                 'detalles' => $monitor_detalle->detalles. ' cambió a '.$estado
             ]);
+            $request->session()->flash('visibilidanota',$estado);
             return back();
         }
     }
@@ -466,7 +484,7 @@ class ControlController extends Controller
             'user_id'   => auth()->user()->id,
             'detalles' => $estado->estado
         ]);
-
+        $request->session()->flash('aceptacion','aceptacion');
         return redirect()->route('versolicitud',$solicitud->id);
     }
 

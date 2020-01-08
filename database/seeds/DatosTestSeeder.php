@@ -307,13 +307,13 @@ class DatosTestSeeder extends Seeder
             }
             if ($i == 15){
                 Accion::create([
-                    'accion' => 'Solicitud en manos de ',
+                    'accion' => 'Transferencia de solicitud',
                     'notificable' => true
                 ]);
             }
             if ($i == 16){
                 Accion::create([
-                    'accion' => 'Autorización para cerrar caso ',
+                    'accion' => 'Autorización para cerrar caso',
                     'notificable' => true
                 ]);
             }

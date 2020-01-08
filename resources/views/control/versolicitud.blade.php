@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="{{asset('assets/plugins/html5-editor/bootstrap-wysihtml5.css')}}" />
 <!-- Dropzone css -->
 <link href="{{asset('assets/plugins/dropzone-master/dist/dropzone.css')}}" rel="stylesheet" type="text/css" />
+<style>
+    small{
+        font-size: 75% !important;
+    }
+</style>
 
 @section('titulo')
 <div class="row page-titles">
@@ -18,6 +23,7 @@
 @endsection
 
 @section('contenido')
+@include('partials.confirmaciones')
 <div class="row">
     <div class="col-lg-12">
         <div class="card-body p-t-0">
@@ -274,6 +280,7 @@
                 <div class="col-xlg-10 col-lg-12 col-md-12">
                     <div class="card-body">
                         <h3 class="card-title">Agregar nota</h3>
+                        <small class="text text-danger">{{$errors->first('nota')}}</small>
                         <form action="{{route('agregarnota')}}" method="POST" enctype="multipart/form-data">
                             {{csrf_field()}}
                             <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
@@ -297,7 +304,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title">Monitor de actividades</h4>
-                            <div class="table-responsive">
+                            <div class="">
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -319,7 +326,7 @@
                                         <td><span class="text-muted"><small>{{$accion->detalles}}</small></span> </td>
                                         <td><small>{{$accion->fecha->format('l j \\ F h:i:s a')}}</small></td>
                                         <td>
-                                            <div class="label label-table label-inverse">{{$accion->fecha->diffForHumans($solicitud->fecha)}}</div>
+                                            <div class="label label-table label-inverse"><small>{{$accion->fecha->diffForHumans($solicitud->fecha)}}</small></div>
                                         </td>
                                         {{--<td>EN</td>--}}
                                     </tr>

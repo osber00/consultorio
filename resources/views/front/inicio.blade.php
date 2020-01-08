@@ -18,13 +18,17 @@
 		                            {{csrf_field()}}
 		                            <!--Titulo-->
 		                            <div class="input-field">
-		                                <input id="titulo" type="text" autocomplete="off" class="validate" name="titulo">
+		                                <input id="titulo" type="text" autocomplete="off" class="validate" name="titulo" value="{{old('titulo')}}">
 		                                <label for="titulo">Título</label>
+										<small class="text text-danger">{{$errors->first('titulo')}}</small>
 		                            </div>
 		                            <!--Descripcion-->
 		                            <div class="input-field">
-		                                <textarea id="descripcion" class="materialize-textarea" name="descripcion" required></textarea>
-		                                <label for="descripcion">Message</label>
+		                                <textarea id="descripcion" class="materialize-textarea" name="descripcion" required>
+											{{old('descripcion')}}
+										</textarea>
+		                                <label for="descripcion">Descripción</label>
+										<small class="text text-danger">{{$errors->first('descripcion')}}</small>
 		                            </div>
 		                            <!-- SEND BUTTON -->
 		                            <div class="contact-send">

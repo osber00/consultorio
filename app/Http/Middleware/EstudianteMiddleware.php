@@ -7,10 +7,10 @@ use Illuminate\Contracts\Auth\Guard;
 
 class EstudianteMiddleware
 {
-    protected $auht;
+    protected $auth;
 
     function __construct(Guard $guard) {
-        $this->auht = $guard;
+        $this->auth = $guard;
     }
 
     /**

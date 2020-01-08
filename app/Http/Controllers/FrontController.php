@@ -24,6 +24,14 @@ class FrontController extends Controller
 
     public function solicitud(Request $request){
     	//dd($request->all());
+
+        $rules = [
+            'titulo' => 'required|min:5|max:200',
+            'descripcion'=> 'required|min:15|max:600'
+        ];
+
+        $this->validate($request,$rules);
+
     	$solicitud = new Solicitud();
     	$solicitud->titulo = $request->get('titulo');
     	$solicitud->descripcion = $request->get('descripcion');
@@ -64,7 +72,10 @@ class FrontController extends Controller
     }
 
     public function adjuntardocumentos(Request $request){
-        
+        $rule = [
+            'nota' => 'required|min:5|max:220'
+        ];
+        $this->validate($request,$rule);
     	if ($request->hasFile('archivo')) {
             $mime   = $request->file('archivo')->getMimeType();
             $ext    = $request->file('archivo')->getClientOriginalExtension();

@@ -33,8 +33,11 @@
 		                            <!--Descripcion-->
 		                            <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
 		                            <div class="input-field">
-		                                <textarea id="nota" class="materialize-textarea" name="nota" required></textarea>
-		                                <label for="nota">Descripción</label>
+		                                <textarea id="nota" class="materialize-textarea" name="nota" required>
+											{{old('nota')}}
+										</textarea>
+		                                <label for="nota">Nota</label>
+										<small class="text text-danger">{{$errors->first('nota')}}</small>
 		                            </div>
 
 		                            <!--Titulo-->
