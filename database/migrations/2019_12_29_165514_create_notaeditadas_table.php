@@ -18,6 +18,7 @@ class CreateNotaeditadasTable extends Migration
             $table->integer('notasolicitud_id')->unsigned();
             $table->foreign('notasolicitud_id')->references('id')->on('notasolicituds');
             $table->text('nota');
+            $table->dateTime('fecha');
             $table->timestamps();
         });
     }

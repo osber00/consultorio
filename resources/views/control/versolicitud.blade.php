@@ -29,7 +29,14 @@
         <div class="card-body p-t-0">
             <div class="card b-all shadow-none">
                 <div class="card-body">
-                    <h3 class="card-title m-b-0">{{$solicitud->titulo}} <small class="text text-danger"><i class="mdi mdi-dots-vertical"></i> {{$solicitud->fecha->format('l j \\ F h:i:s a')}}</small></h3>
+                    <h3 class="card-title m-b-0">
+                        {{$solicitud->titulo}}
+                        <small class="text text-danger">
+                            <i class="mdi mdi-dots-vertical"></i>
+                            {{$solicitud->fecha->format('l j \\ F h:i:s a')}}
+                        </small>
+                        {{--<small class="countdown"></small>--}}
+                    </h3>
                 </div>
                 <div>
                     <hr class="m-t-0">
@@ -80,45 +87,61 @@
                     </p>
                     <p><b>Descripción de la solicitud</b></p>
                     <p>{{$solicitud->descripcion}}</p>
+                    @if($solicitud->semaforo != null)
+                    <div>
+                        <table style="text-align: center; border-collapse: separate;border-spacing: 10px;">
+                            <tr style="font-weight: 600">
+                                <td class="text text-info" id="dias">00</td>
+                                <td class="text text-info" id="horas">00</td>
+                                <td class="text text-info" id="minutos">00</td>
+                                <td class="text text-info" id="segundos">00</td>
+                            </tr>
+                            <tr style="font-size: 8px;">
+                                <td>Días</td>
+                                <td>Horas</td>
+                                <td>Min</td>
+                                <td>Seg</td>
+                            </tr>
+                        </table>
+                    </div>
+                    @endif
                     <p>
-
-                    @can('isestudiante')
-                        @can('solicitudabierta',$solicitud)
-                            @if($participacion_est >= 1 && $solicitud->manejador_id == auth()->user()->id)
-                            <div class="btn-group m-b-10" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Transferir solicitud
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
-                                    <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
-                                </div>
-                            </div>
-                            @endif
-                            <br>
-                            @if($participacion_est >= 1 && $auth_tutor >= 1 && $solicitud->manejador_id == auth()->user()->id)
-                                <a href="{{route('cerrarsolicitud',$solicitud->id)}}" class="btn btn-success">Marcar como solicitud resuelta</a>
-                            @endif
-                        @endcan
-                    @endcan
-
-                    @can('istutor')
-                        @can('solicitudabierta',$solicitud)
-                            @if($participacion_tut >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                        @can('isestudiante')
+                            @can('solicitudabierta',$solicitud)
+                                @if($participacion_est >= 1 && $solicitud->manejador_id == auth()->user()->id)
                                 <div class="btn-group m-b-10" role="group">
                                     <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Transferir solicitud
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Para ajustes</a>
-                                        <a class="dropdown-item" href="{{route('autorizacioncierre',$solicitud->id)}}">Autorización para cerrar</a>
+                                        <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
                                         <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
                                     </div>
                                 </div>
-                            @endif
+                                @endif
+                                <br>
+                                @if($participacion_est >= 1 && $auth_tutor >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                                    <a href="{{route('cerrarsolicitud',$solicitud->id)}}" class="btn btn-success">Marcar como solicitud resuelta</a>
+                                @endif
+                            @endcan
                         @endcan
-                    @endcan
 
+                        @can('istutor')
+                            @can('solicitudabierta',$solicitud)
+                                @if($participacion_tut >= 1 && $solicitud->manejador_id == auth()->user()->id)
+                                    <div class="btn-group m-b-10" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Transferir solicitud
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Para ajustes</a>
+                                            <a class="dropdown-item" href="{{route('autorizacioncierre',$solicitud->id)}}">Autorización para cerrar</a>
+                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'admin'])}}">Administrador</a>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endcan
+                        @endcan
                     </p>
                     @can('isadmin')
                         @can('solicitudabierta',$solicitud)
@@ -318,7 +341,7 @@
                                     </thead>
                                     <tbody>
                                     @foreach($monitor as $accion)
-                                    <tr>
+                                    <tr class="@lang('custom.acc-'.$accion->accion->id)">
                                         <td>
                                             <a href="javascript:void(0)"><small>{{$accion->user->nombre}}</small></a>
                                         </td>
@@ -418,6 +441,10 @@
     </div>
 </div>
 <!-- /.modal -->
+
+    //Auxiliares
+    <div id="f_asig">{{strtotime($solicitud->fecha_semaforo->format('Y/m/d h:i:s'))}}</div>
+    <div id="f_ahora">{{strtotime($ahora->format('Y/m/d h:i:s'))}}</div>
 @endsection
 
 @section('js')
@@ -427,6 +454,7 @@
     <script src="{{asset('assets/plugins/dropify/dist/js/dropify.min.js')}}"></script>
     <script src="{{asset('assets/plugins/html5-editor/wysihtml5-0.3.0.js')}}"></script>
     <script src="{{asset('assets/plugins/html5-editor/bootstrap-wysihtml5.js')}}"></script>
+    <script src="{{asset('assets/plugins/moment/min/moment.min.js')}}"></script>
     <script>
     $(document).ready(function() {
         //var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
@@ -443,6 +471,25 @@
                     error: 'El archivo es damasiado grande'
                 }
             });
+
+            //Cuenta regresiva para responder
+            var eventTime = $('#f_asig').html(); // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT ->format('l j \\ F h:i:s a')
+            var currentTime = $('#f_ahora').html(); // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
+            var diffTime = eventTime - currentTime;
+            var duration = moment.duration(diffTime*1000, 'milliseconds');
+            var interval = 1000;
+
+            setInterval(function(){
+                duration = moment.duration(duration - interval, 'milliseconds');
+                $('.countdown').text(duration.days()+":"+duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
+                $('#dias').text(formatoNumero(duration.days()));
+                $('#horas').text(formatoNumero(duration.hours()));
+                $('#minutos').text(formatoNumero(duration.minutes()));
+                $('#segundos').text(formatoNumero(duration.seconds()));
+            }, interval);
+
+
+
             $('.textarea_description').wysihtml5();
 
             $('.btn_edicion_nota').click(function (e) {
@@ -493,5 +540,13 @@
                 })
             })
     });
+
+    function formatoNumero($dato) {
+        if($dato <= 9){
+            return "0"+$dato;
+        }else {
+            return $dato;
+        }
+    }
     </script>
 @endsection

@@ -7,15 +7,17 @@ use Jenssegers\Date\Date;
 
 class Notaeditada extends Model
 {
-    protected $fillable = ['notasolicitud_id','nota'];
+    protected $fillable = ['notasolicitud_id','nota','fecha'];
+
+    protected $dates = ['fecha'];
 
     public function notasolicitud()
     {
         return $this->belongsTo(Notasolicitud::class);
     }
 
-    public function getFechaAttribute()
+    public function getFechaEdicionAttribute()
     {
-        return new Date($this->created_at);
+        return new Date($this->fecha);
     }
 }

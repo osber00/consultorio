@@ -33,6 +33,9 @@ class CreateSolicitudsTable extends Migration
             $table->foreign('categoria_id')->references('id')->on('categorias');
             $table->boolean('activa')->default(true);
             $table->boolean('eliminada')->default(false);
+            $table->dateTime('asignacion')->nullable();
+            $table->dateTime('semaforo')->nullable();
+            $table->dateTime('cierre')->nullable();
             $table->timestamps();
         });
     }

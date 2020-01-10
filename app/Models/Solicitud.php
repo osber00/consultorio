@@ -7,7 +7,9 @@ use Jenssegers\Date\Date;
 
 class Solicitud extends Model
 {
-    protected $fillable = ['titulo','descripcion','user_id','responsable_id','supervisor_id','estado_id','prioridad_id','categoria_id'];
+    protected $fillable = ['titulo','descripcion','user_id','responsable_id','supervisor_id','estado_id','prioridad_id','categoria_id','asignacion','semaforo','cierre'];
+
+    protected $dates = ['asignacion','semaforo','cierre'];
 
     public function user(){
     	return $this->belongsTo(User::class);
@@ -41,4 +43,21 @@ class Solicitud extends Model
     {
         return new Date($this->created_at);
     }
+
+    public function getFechaAsignacionAttribute()
+    {
+        return new Date($this->asignacion);
+    }
+
+    public function getFechaSemaforoAttribute()
+    {
+        return new Date($this->semaforo);
+    }
+
+    public function getFechaCierreAttribute()
+    {
+        return new Date($this->cierre);
+    }
+
+
 }

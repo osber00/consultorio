@@ -2,6 +2,7 @@
 
 namespace Consultorio\Http\Controllers;
 
+use Carbon\Carbon;
 use Consultorio\Models\Aceptarsolicitud;
 use Consultorio\Models\Estado;
 use Consultorio\Models\Monitorsolicitud;
@@ -31,6 +32,15 @@ class ControlController extends Controller
 
     	//dd($solicitudes);
     	return view('control.inicio',compact('solicitudes'));
+    }
+
+    public function testweekend(){
+        $dt = Carbon::create(2020, 1, 6);
+        $dt2 = Carbon::create(2020, 1, 15);
+        $daysForExtraCoding = $dt->diffInHoursFiltered(function(Carbon $date) {
+            return $date->isWeekend();
+        }, $dt2);
+        dd($daysForExtraCoding);
     }
 
     //Ver detalles de una solicitud
@@ -63,8 +73,8 @@ class ControlController extends Controller
                 $participacion_tut = null;
             }
             $auth_tutor = Monitorsolicitud::where(['user_id'=>$solicitud->revisor_id,'solicitud_id'=>$solicitud->id,'accion_id'=>16])->count();
-
-            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut','auth_tutor'));
+            $ahora = Carbon::now();
+            return view('control.versolicitud',compact('solicitud','estudiantes','tutores','categorias','prioridades','notas','monitor','participacion_est','participacion_tut','auth_tutor','ahora'));
         }else{
     	    return back();
         }
@@ -74,18 +84,51 @@ class ControlController extends Controller
     public function asignaresponsable(Request $request, $id,$responsable){
     	$solicitud = Solicitud::find($id);
     	if ($solicitud) {
+
+    	    //establecer tiempo de cierre para resolver solicitud
+
+            $ahora = Carbon::now();
+            $plazoCalendario = Carbon::now()->addDays(5);
+            $diasNoLaborales = $ahora->diffInDaysFiltered(function (Carbon $date){
+               return $date->isWeekend();
+            },$plazoCalendario);
+
+            if ($diasNoLaborales >=1 || $plazoCalendario->isWeekend() == true){
+                $fechaCierre = $plazoCalendario->addDays(2);
+            }else{
+                $fechaCierre = $plazoCalendario;
+            }
+
+            //$isFDS = $fechaCierre->isWeekend();
+            //dd($ahora,$plazoCalendario,$diasNoLaborales, $fechaCierre,$isFDS);
+
     		$solicitud->responsable_id = $responsable;
     		$solicitud->manejador_id = $responsable;
     		$solicitud->estado_id = 2;
+    		$solicitud->asignacion = $ahora;
+    		$solicitud->semaforo = $fechaCierre;
     		$solicitud->save();
     		$res = User::find($responsable);
-    		//Responsable
-            Monitorsolicitud::create([
-                'solicitud_id' => $solicitud->id,
-                'accion_id' => 5,
-                'user_id'   => auth()->user()->id,
-                'detalles' => $res->nombre
-            ]);
+
+    		$hasResponsable = Monitorsolicitud::where(['solicitud_id'=>$solicitud->id, 'accion_id'=>5])->count();
+
+    		if ($hasResponsable >= 1){
+                //Reasinacion Responsable
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 13,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $res->nombre
+                ]);
+            }else{
+                //Responsable
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 5,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $res->nombre
+                ]);
+            }
 
             //A cargo
             Monitorsolicitud::create([
@@ -377,7 +420,7 @@ class ControlController extends Controller
                 Notaeditada::create([
                     'notasolicitud_id' => $notasolicitud->id,
                     'nota'  => $notasolicitud->nota,
-                    'created_at' => $notasolicitud->created_at
+                    'fecha' => $notasolicitud->created_at
                 ]);
             }
             $monitor_detalle = Monitorsolicitud::where('notasolicitud_id',$notasolicitud->id)->first();
@@ -389,7 +432,8 @@ class ControlController extends Controller
 
             Notaeditada::create([
                 'notasolicitud_id' => $notasolicitud->id,
-                'nota'  => $notasolicitud->nota
+                'nota'  => $notasolicitud->nota,
+                'fecha' => Carbon::now()
             ]);
 
 

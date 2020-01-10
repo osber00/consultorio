@@ -36,4 +36,10 @@ return [
     'ic-urgente' => '<i class="mdi mdi-clock-fast"></i>',
     'ic-inmediata' => '<i class="mdi mdi-camera-timer"></i>',
     'ic-sin prioridad' => '<i class="mdi mdi-close"></i>',
+
+    //Acciones en monitor de solicitud
+    'acc-2' => 'table-info',
+    'acc-10' => 'table-info',
+    'acc-7' => 'table-warning',
+    'acc-8' => 'table-warning',
 ];
