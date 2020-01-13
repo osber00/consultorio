@@ -17,7 +17,11 @@ class SolicitudPolicy
                 $user->id == 1;
     }
 
+    public function rechazarsolicitud($user, Solicitud $solicitud){
+        return $user->id == 1;
+    }
+
     public function solicitudabierta($user, Solicitud $solicitud){
-        return $solicitud->estado_id != 5;
+        return $solicitud->estado_id != 5 && $solicitud->estado_id != 7;
     }
 }

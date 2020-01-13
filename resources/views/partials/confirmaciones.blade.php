@@ -80,3 +80,11 @@
     </div>
 @endif
 
+@if(session('sin-revisor'))
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+        <h3 class="text-danger"><i class="fa fa-check-circle"></i> Sin revisor asignado</h3>
+        Esta solicitud no tiene asignado un revisor
+    </div>
+@endif
+

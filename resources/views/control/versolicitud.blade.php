@@ -159,7 +159,7 @@
                                             @endforeach
                                         </div>
                                     </div>
-                                    <div class="btn-group" role="group">
+                                    {{--<div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn text-dark btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="mdi mdi-calendar-clock font-18"></i>
                                         </button>
@@ -168,7 +168,7 @@
                                                 <a class="dropdown-item @if($prioridad->id == $solicitud->prioridad_id) active @endif" href="{{route('modificarprioridad',[$solicitud->id,$prioridad->id])}}">{{$prioridad->prioridad}} ({{$prioridad->tiempo}})</a>
                                             @endforeach
                                         </div>
-                                    </div>
+                                    </div>--}}
                                 </div>
 
                                 <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
@@ -197,6 +197,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 @if($solicitud->manejador_id == auth()->user()->id)
                                     <div class="btn-group m-b-10" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -206,6 +207,8 @@
                                             <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
                                             <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
                                         </div>
+
+                                        <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-danger btn-xs"><i class="mdi mdi-block-helper"></i> No admitir solicitud</a>
                                     </div>
                                 @endif
                             </div>
@@ -442,9 +445,9 @@
 </div>
 <!-- /.modal -->
 
-    //Auxiliares
-    <div id="f_asig">{{strtotime($solicitud->fecha_semaforo->format('Y/m/d h:i:s'))}}</div>
-    <div id="f_ahora">{{strtotime($ahora->format('Y/m/d h:i:s'))}}</div>
+    {{--Auxiliares--}}
+    <div id="f_asig" style="display: none;">{{strtotime($solicitud->fecha_semaforo->format('Y/m/d h:i:s'))}}</div>
+    <div id="f_ahora" style="display: none;">{{strtotime($ahora->format('Y/m/d h:i:s'))}}</div>
 @endsection
 
 @section('js')

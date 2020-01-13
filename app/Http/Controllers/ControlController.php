@@ -25,7 +25,7 @@ class ControlController extends Controller
 
     //Listado de solicitudes
     public function inicio(){
-    	$solicitudes = Solicitud::where('eliminada',false)
+    	$solicitudes = Solicitud::where(['estado_id'=>1, 'eliminada'=>false])
     			->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
     			->orderBy('id','asc')
     			->get();
@@ -41,6 +41,38 @@ class ControlController extends Controller
             return $date->isWeekend();
         }, $dt2);
         dd($daysForExtraCoding);
+    }
+
+    public function solicitudestado($est){
+        $solicitudes = Solicitud::where(['estado_id'=>$est, 'eliminada'=>false])
+                ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
+                ->orderBy('id','asc')
+                ->get();
+
+        return view('control.inicio',compact('solicitudes'));
+    }
+
+    public function rechazarsolicitud($id){
+        $solicitud = Solicitud::find($id);
+        if ($solicitud) {
+            if (Gate::allows('rechazarsolicitud',$solicitud)) {
+                $solicitud->estado_id = 7;
+                $solicitud->save();
+
+                //Modificación de estado
+                $estado = Estado::find(7);
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 10,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $estado->estado
+                ]);
+
+                return redirect()->route('versolicitud',$solicitud->id);
+            }
+        }else{
+            return back();
+        }
     }
 
     //Ver detalles de una solicitud
@@ -171,13 +203,21 @@ class ControlController extends Controller
         }elseif ($agente == 'tutor'){
             $responsable = User::find($solicitud->revisor_id);
             //estado
-            $estado = Estado::find(4);
-            Monitorsolicitud::create([
-                'solicitud_id' => $solicitud->id,
-                'accion_id' => 10,
-                'user_id'   => auth()->user()->id,
-                'detalles' => $estado->estado
-            ]);
+            
+            if ($responsable) {
+                $estado = Estado::find(4);
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 10,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $estado->estado
+                ]);
+            }else{
+                $request->session()->flash('sin-revisor','sin-revisor');
+                return back();
+            }
+
+            
         }else{
             $responsable = User::find($solicitud->responsable_id);
             //estado
@@ -501,7 +541,7 @@ class ControlController extends Controller
     //Acciones perfil Estudiante
     public function estudiante(){
         $solicitudes = Solicitud::where('eliminada',false)
-            ->where('responsable_id',auth()->user()->id)
+            ->where('responsable_id', auth()->user()->id)
             ->with(['user','responsable','revisor','estado','prioridad','categoria'])
             ->orderBy('id','asc')
             ->get();
