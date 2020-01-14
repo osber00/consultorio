@@ -15,7 +15,8 @@
     return view('welcome');
 });*/
 
-Route::get('/','FrontController@inicio')->name('inicio');
+Route::get('/','FrontController@home')->name('home');
+Route::get('/inicio','FrontController@inicio')->name('inicio');
 Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
@@ -33,6 +34,9 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
         Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
         Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
         Route::get('rechazarsolicitud/{id}','ControlController@rechazarsolicitud')->name('rechazarsolicitud');
+
+
+        Route::resource('noticias','NoticiaController');
     });
 
     Route::group(['middleware'=>'isEst'],function (){
