@@ -7,10 +7,10 @@ return [
     'nueva' 	=> 'primary',
     'asignada' 	=> 'info',
     'en proceso' => 'warning',
-    'en revisión' => 'danger',
+    'en revisión' => 'info',
     'resuelta' => 'inverse',
     'esperando datos' => 'inverse',
-    'rechazada' => 'danger',
+    'no admitida' => 'danger',
 
     //Colores prioridad
     'baja'     => 'light-primary',
@@ -27,7 +27,7 @@ return [
     'ic-en revisión' => '<i class="mdi mdi-account-star"></i>',
     'ic-resuelta' => '<i class="mdi mdi-account-check"></i>',
     'ic-esperando datos' => '<i class="mdi mdi-pause"></i>',
-    'ic-rechazada' => '<i class="mdi mdi-close"></i>',
+    'ic-no admitida' => '<i class="mdi mdi-close"></i>',
 
     //Iconos prioridad
     'ic-baja'     => '<i class="mdi mdi-clock-in"></i>',

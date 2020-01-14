@@ -86,16 +86,24 @@ class ControlController extends Controller
 
     public function pausarsolicitud(Request $request, $id){
         $solicitud = Solicitud::find($id);
-        $solicitud->estado_id = $estado->id;
-        $solicitud->save();
+        if ($solicitud) {
+            if (Gate::allows('pausarsolicitud',$solicitud)) {
+                $estado = Estado::find(6);
+                $solicitud->estado_id = $estado->id;
+                $solicitud->save();
 
-        $estado = Estado::find(6);
-        Monitorsolicitud::create([
-            'solicitud_id' => $solicitud->id,
-            'accion_id' => 10,
-            'user_id'   => auth()->user()->id,
-            'detalles' => $estado->estado
-        ]);
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 10,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $estado->estado
+                ]);
+
+                return redirect()->route('versolicitud',$solicitud->id);
+            }
+        }else{
+            return back();
+        }
     }
 
     //Ver detalles de una solicitud

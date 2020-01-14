@@ -33,6 +33,7 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
         Route::get('modificarprioridad/{id}/{prioridad}','ControlController@modificarprioridad')->name('modificarprioridad');
         Route::get('asignaresponsable/{id}/{responsable}','ControlController@asignaresponsable')->name('asignaresponsable');
         Route::get('rechazarsolicitud/{id}','ControlController@rechazarsolicitud')->name('rechazarsolicitud');
+        Route::get('pausarsolicitud/{id}','ControlController@pausarsolicitud')->name('pausarsolicitud');
     });
 
     Route::group(['middleware'=>'isEst'],function (){

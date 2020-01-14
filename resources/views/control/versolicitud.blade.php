@@ -60,16 +60,25 @@
                         <i class="mdi mdi-dots-vertical"></i>
                         <small>{{$solicitud->categoria->categoria}}</small>
                         
-                        <i class="mdi mdi-dots-vertical"></i>
                         @can('isadmin')
-                            @can('solicitudabierta',$solicitud)
-                                @if($solicitud->manejador_id == auth()->user()->id)
-                                    <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-danger btn-xs"><i class="mdi mdi-block-helper"></i> No admitir solicitud</a>
-                                    <i class="mdi mdi-dots-vertical"></i>
-                                    <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-inverse btn-xs"><i class="mdi mdi-pause"></i> Pausar solicitud</a>
+                            @if($solicitud->manejador_id == auth()->user()->id)
+                                @if($solicitud->estado_id != 7)
+                                <i class="mdi mdi-dots-vertical"></i>
+                                <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-danger btn-xs"><i class="mdi mdi-block-helper"></i> No admitir solicitud</a>
                                 @endif
-                            @endcan
+                                @if($solicitud->estado_id != 5 && $solicitud->estado_id != 6 && $solicitud->estado_id != 7)
+                                <i class="mdi mdi-dots-vertical"></i>
+                                <a href="{{route('pausarsolicitud',$solicitud->id)}}" class="btn btn-inverse btn-xs"><i class="mdi mdi-pause"></i> Pausar solicitud</a>
+                                @endif
+                            @endif
                         @endcan
+                        <i class="mdi mdi-dots-vertical"></i>
+                        <small>Resolver antes de: 
+                            <span class="text-info"><i class="mdi mdi-clock"></i> {{$solicitud->fecha_semaforo->format('l j \\ F h:i:s a')}}</span>
+                            @if($ahora > $solicitud->semaforo)
+                                {{$ahora->diffForHumans($solicitud->fecha_semaforo)}}
+                            @endif
+                        </small>
                     </p>
                     <p>
                         <i class="mdi mdi-account-check"></i>
@@ -98,24 +107,26 @@
                     </p>
                     <p><b>Descripción de la solicitud</b></p>
                     <p>{{$solicitud->descripcion}}</p>
-                    @if($solicitud->semaforo != null)
-                    <div>
-                        <table style="text-align: center; border-collapse: separate;border-spacing: 10px;">
-                            <tr style="font-weight: 600">
-                                <td class="text text-info" id="dias">00</td>
-                                <td class="text text-info" id="horas">00</td>
-                                <td class="text text-info" id="minutos">00</td>
-                                <td class="text text-info" id="segundos">00</td>
-                            </tr>
-                            <tr style="font-size: 8px;">
-                                <td>Días</td>
-                                <td>Horas</td>
-                                <td>Min</td>
-                                <td>Seg</td>
-                            </tr>
-                        </table>
-                    </div>
-                    @endif
+                    @can('solicitudabierta',$solicitud)
+                        @if($solicitud->semaforo != null && $ahora < $solicitud->semaforo)
+                        <div>
+                            <table style="text-align: center; border-collapse: separate;border-spacing: 10px;">
+                                <tr style="font-weight: 600">
+                                    <td class="text text-info" id="dias">00</td>
+                                    <td class="text text-info" id="horas">00</td>
+                                    <td class="text text-info" id="minutos">00</td>
+                                    <td class="text text-info" id="segundos">00</td>
+                                </tr>
+                                <tr style="font-size: 8px;">
+                                    <td>Días</td>
+                                    <td>Horas</td>
+                                    <td>Min</td>
+                                    <td>Seg</td>
+                                </tr>
+                            </table>
+                        </div>
+                        @endif
+                    @endcan
                     <p>
                         @can('isestudiante')
                             @can('solicitudabierta',$solicitud)
@@ -155,8 +166,8 @@
                         @endcan
                     </p>
                     @can('isadmin')
+                        <div class="row">
                         @can('solicitudabierta',$solicitud)
-                            <div class="row">
                                 <div class="btn-group m-b-10 m-r-10" role="group" aria-label="Button group with nested dropdown">
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-secondary text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -208,20 +219,19 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                @if($solicitud->manejador_id == auth()->user()->id)
-                                    <div class="btn-group m-b-10" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Transferir solicitud
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
-                                            <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
                         @endcan
+                        @if($solicitud->manejador_id == auth()->user()->id)
+                        <div class="btn-group m-b-10" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn m-b-10 text-dark btn-secondary p-10 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transferir solicitud
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
+                                <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
+                            </div>
+                        </div>
+                        @endif
+                        </div>
                     @endcan
 
                 </div>
@@ -312,28 +322,28 @@
                     </div>
                 </div>
                 @can('solicitudabierta',$solicitud)
-                <div class="col-xlg-10 col-lg-12 col-md-12">
-                    <div class="card-body">
-                        <h3 class="card-title">Agregar nota</h3>
-                        <small class="text text-danger">{{$errors->first('nota')}}</small>
-                        <form action="{{route('agregarnota')}}" method="POST" enctype="multipart/form-data">
-                            {{csrf_field()}}
-                            <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
-                            <div class="form-group">
-                                <textarea class="textarea_description form-control" rows="10" name="nota" placeholder="Escribir nota"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-file-now">Agregar documento a la nota <small>(Imágenes png, jpg y documentos pdf)</small></label>
-                                <input type="file" name="archivo" id="input-file-now" class="dropify" />
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" name="privada"  class="js-switch" data-color="#f62d51" data-size="small" />
-                                Marcar como nota privada
-                            </div>
-                            <button type="submit" class="btn btn-danger m-t-20"><i class="fa fa-envelope-o"></i> Enviar</button>
-                        </form>
+                    <div class="col-xlg-10 col-lg-12 col-md-12">
+                        <div class="card-body">
+                            <h3 class="card-title">Agregar nota</h3>
+                            <small class="text text-danger">{{$errors->first('nota')}}</small>
+                            <form action="{{route('agregarnota')}}" method="POST" enctype="multipart/form-data">
+                                {{csrf_field()}}
+                                <input type="hidden" name="solicitud_id" value="{{$solicitud->id}}">
+                                <div class="form-group">
+                                    <textarea class="textarea_description form-control" rows="10" name="nota" placeholder="Escribir nota"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-file-now">Agregar documento a la nota <small>(Imágenes png, jpg y documentos pdf)</small></label>
+                                    <input type="file" name="archivo" id="input-file-now" class="dropify" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="privada"  class="js-switch" data-color="#f62d51" data-size="small" />
+                                    Marcar como nota privada
+                                </div>
+                                <button type="submit" class="btn btn-danger m-t-20"><i class="fa fa-envelope-o"></i> Enviar</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 @endcan
                 <div class="col-12">
                     <div class="card">
@@ -491,13 +501,20 @@
             var duration = moment.duration(diffTime*1000, 'milliseconds');
             var interval = 1000;
 
-            setInterval(function(){
+            var cuentaregresiva = setInterval(function(){
                 duration = moment.duration(duration - interval, 'milliseconds');
                 $('.countdown').text(duration.days()+":"+duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
                 $('#dias').text(formatoNumero(duration.days()));
                 $('#horas').text(formatoNumero(duration.hours()));
                 $('#minutos').text(formatoNumero(duration.minutes()));
                 $('#segundos').text(formatoNumero(duration.seconds()));
+                if (duration.days() == 0 && duration.hours() == 0 && duration.minutes() == 0 && duration.seconds() == 0) {
+                    $('#dias').text('--');
+                    $('#horas').text('--');
+                    $('#minutos').text('--');
+                    $('#segundos').text('--');
+                    clearInterval(cuentaregresiva);
+                }
             }, interval);
 
 

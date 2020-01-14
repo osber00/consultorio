@@ -19,12 +19,13 @@
             <div class="row">
                 <div class="col-xlg-2 col-lg-3 col-md-3">
                     <div class="card-body inbox-panel">
+                        @can('isadmin')
                         <ul class="list-group list-group-full">
                             <li class="list-group-item active"> 
-                                <a href="{{route('solicitudes')}}"><i class="mdi mdi-bell-ring"></i> Todas </a><span class="badge badge-success ml-auto">6</span>
+                                <a href="{{route('solicitudes')}}"><i class="mdi mdi-clipboard-text"></i> Todas </a><span class="badge badge-success ml-auto">6</span>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{route('solicitudestado',1)}}"> <i class="mdi mdi-account-switch"></i> Nuevas </a>
+                                <a href="{{route('solicitudestado',1)}}"> <i class="mdi mdi-bell-ring"></i> Nuevas </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{route('solicitudestado',2)}}"> <i class="mdi mdi-account-switch"></i> Asignadas </a>
@@ -36,15 +37,16 @@
                                 <a href="{{route('solicitudestado',4)}}"> <i class="mdi mdi-account-star"></i> En revisión </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{route('solicitudestado',6)}}"> <i class="mdi mdi-pause"></i> Pausadas </a>
+                                <a href="{{route('solicitudestado',6)}}"> <i class="mdi mdi-pause"></i> Esp. datos </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{route('solicitudestado',5)}}"> <i class="mdi mdi-account-check"></i> Cerradas </a>
                             </li>
                             <li class="list-group-item">
-                                <a href="{{route('solicitudestado',7)}}"> <i class="mdi mdi-close"></i> Rechazadas </a>
+                                <a href="{{route('solicitudestado',7)}}"> <i class="mdi mdi-close"></i> No admitidas </a>
                             </li>
                         </ul>
+                        @endcan
                         <h3 class="card-title m-t-40">Labels</h3>
                         <div class="list-group b-0 mail-list"> <a href="#" class="list-group-item"><span class="fa fa-circle text-info m-r-10"></span>Work</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-warning m-r-10"></span>Family</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-purple m-r-10"></span>Private</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-danger m-r-10"></span>Friends</a> <a href="#" class="list-group-item"><span class="fa fa-circle text-success m-r-10"></span>Corporate</a> </div>
                     </div>
