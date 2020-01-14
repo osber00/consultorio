@@ -25,6 +25,7 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
     //Solo admin
     Route::group(['middleware'=>'isAdmin'], function (){
         Route::get('','ControlController@inicio')->name('admin');
+        Route::get('solicitudes','ControlController@solicitudes')->name('solicitudes');
         Route::get('solicitudestado/{est}','ControlController@solicitudestado')->name('solicitudestado');
         Route::get('testweekend','ControlController@testweekend')->name('testweekend');
         Route::get('asignarsupervisor/{id}/{supervisor}','ControlController@asignarsupervisor')->name('asignarsupervisor');

@@ -43,6 +43,15 @@ class ControlController extends Controller
         dd($daysForExtraCoding);
     }
 
+    public function solicitudes(){
+        $solicitudes = Solicitud::where('eliminada',false)
+                ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
+                ->orderBy('id','asc')
+                ->get();
+
+        return view('control.inicio',compact('solicitudes'));
+    }
+
     public function solicitudestado($est){
         $solicitudes = Solicitud::where(['estado_id'=>$est, 'eliminada'=>false])
                 ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
@@ -73,6 +82,20 @@ class ControlController extends Controller
         }else{
             return back();
         }
+    }
+
+    public function pausarsolicitud(Request $request, $id){
+        $solicitud = Solicitud::find($id);
+        $solicitud->estado_id = $estado->id;
+        $solicitud->save();
+
+        $estado = Estado::find(6);
+        Monitorsolicitud::create([
+            'solicitud_id' => $solicitud->id,
+            'accion_id' => 10,
+            'user_id'   => auth()->user()->id,
+            'detalles' => $estado->estado
+        ]);
     }
 
     //Ver detalles de una solicitud
@@ -220,14 +243,20 @@ class ControlController extends Controller
             
         }else{
             $responsable = User::find($solicitud->responsable_id);
-            //estado
-            $estado = Estado::find(3);
-            Monitorsolicitud::create([
-                'solicitud_id' => $solicitud->id,
-                'accion_id' => 10,
-                'user_id'   => auth()->user()->id,
-                'detalles' => $estado->estado
-            ]);
+
+            if($responsable && $responsable->rol_id == 3){
+                //estado
+                $estado = Estado::find(3);
+                Monitorsolicitud::create([
+                    'solicitud_id' => $solicitud->id,
+                    'accion_id' => 10,
+                    'user_id'   => auth()->user()->id,
+                    'detalles' => $estado->estado
+                ]);
+            }else{
+                $request->session()->flash('sin-responsable','sin-responsable');
+                return back();
+            }
         }
 
         if ($solicitud) {

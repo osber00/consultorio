@@ -53,12 +53,23 @@
                     </div>
                     <p>
                         <span class="label label-@lang('custom.'.$solicitud->estado->estado) m-r-10">@lang('custom.ic-'.$solicitud->estado->estado) {{$solicitud->estado->estado}}</span>
-                        <i class="mdi mdi-dots-vertical"></i>
+                        {{--<i class="mdi mdi-dots-vertical"></i>
                         <span class="label label-@lang('custom.'.$solicitud->prioridad->prioridad)">
 	                        @lang('custom.ic-'.$solicitud->prioridad->prioridad) {{$solicitud->prioridad->prioridad}}
-	                    </span>
+	                    </span>--}}
                         <i class="mdi mdi-dots-vertical"></i>
                         <small>{{$solicitud->categoria->categoria}}</small>
+                        
+                        <i class="mdi mdi-dots-vertical"></i>
+                        @can('isadmin')
+                            @can('solicitudabierta',$solicitud)
+                                @if($solicitud->manejador_id == auth()->user()->id)
+                                    <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-danger btn-xs"><i class="mdi mdi-block-helper"></i> No admitir solicitud</a>
+                                    <i class="mdi mdi-dots-vertical"></i>
+                                    <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-inverse btn-xs"><i class="mdi mdi-pause"></i> Pausar solicitud</a>
+                                @endif
+                            @endcan
+                        @endcan
                     </p>
                     <p>
                         <i class="mdi mdi-account-check"></i>
@@ -207,8 +218,6 @@
                                             <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'tutor'])}}">Para revisión</a>
                                             <a class="dropdown-item" href="{{route('transferenciadecaso',[$solicitud->id,'est'])}}">Responsable</a>
                                         </div>
-
-                                        <a href="{{route('rechazarsolicitud',$solicitud->id)}}" class="btn btn-danger btn-xs"><i class="mdi mdi-block-helper"></i> No admitir solicitud</a>
                                     </div>
                                 @endif
                             </div>

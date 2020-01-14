@@ -9,7 +9,7 @@ return [
     'en proceso' => 'warning',
     'en revisión' => 'danger',
     'resuelta' => 'inverse',
-    'pausada' => 'inverse',
+    'esperando datos' => 'inverse',
     'rechazada' => 'danger',
 
     //Colores prioridad
@@ -26,7 +26,7 @@ return [
     'ic-en proceso' => '<i class="mdi mdi-account-settings-variant"></i>',
     'ic-en revisión' => '<i class="mdi mdi-account-star"></i>',
     'ic-resuelta' => '<i class="mdi mdi-account-check"></i>',
-    'ic-pausada' => '<i class="mdi mdi-pause"></i>',
+    'ic-esperando datos' => '<i class="mdi mdi-pause"></i>',
     'ic-rechazada' => '<i class="mdi mdi-close"></i>',
 
     //Iconos prioridad

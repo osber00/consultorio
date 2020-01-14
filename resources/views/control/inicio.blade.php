@@ -21,7 +21,10 @@
                     <div class="card-body inbox-panel">
                         <ul class="list-group list-group-full">
                             <li class="list-group-item active"> 
-                                <a href="{{route('solicitudestado',1)}}"><i class="mdi mdi-bell-ring"></i> Nuevas </a><span class="badge badge-success ml-auto">6</span>
+                                <a href="{{route('solicitudes')}}"><i class="mdi mdi-bell-ring"></i> Todas </a><span class="badge badge-success ml-auto">6</span>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{route('solicitudestado',1)}}"> <i class="mdi mdi-account-switch"></i> Nuevas </a>
                             </li>
                             <li class="list-group-item">
                                 <a href="{{route('solicitudestado',2)}}"> <i class="mdi mdi-account-switch"></i> Asignadas </a>
@@ -78,9 +81,9 @@
                     <div class="card-body p-t-0">
                         <div class="card b-all shadow-none">
                             <div class="inbox-center table-responsive">
-                                <table class="table table-hover no-wrap">
+                                <table class="table table-hover no-wrap" style="margin-bottom: 0;">
                                     <tbody>
-                                    	@foreach($solicitudes as $solicitud)
+                                    	@forelse($solicitudes as $solicitud)
                                         <tr class="unread">
                                             <td style="width:40px" class="hidden-xs-down"><i class="fa fa-star-o"></i></td>
                                             <td class="hidden-xs-down">{{str_limit($solicitud->titulo,20)}}</td>
@@ -94,16 +97,29 @@
                                                             <small class="text text-danger">Sin asignación</small>
                                                         @endif
                                                     </small>
-	                                            	<span class="label label-@lang('custom.'.$solicitud->prioridad->prioridad)">
+	                                            	{{--<span class="label label-@lang('custom.'.$solicitud->prioridad->prioridad)">
 	                                					@lang('custom.ic-'.$solicitud->prioridad->prioridad) {{$solicitud->prioridad->prioridad}}
-	                                				</span>
-	                                				<small>, {{$solicitud->categoria->categoria}}</small>
+	                                				</span>--}}
+	                                				<small>{{$solicitud->categoria->categoria}}</small>
                                             	</a>
                                             </td>
-                                            <td class="hidden-xs-down"><i class="fa fa-paperclip"></i></td>
-                                            <td class="text-right"> <small>{{$solicitud->fecha->format('l j \\ F')}}</small> </td>
+                                            <td class="hidden-xs-down"><small><i class="mdi mdi-calendar"></i> {{$solicitud->fecha->format('l j \\ F')}}</small></td>
+                                            <td class="text-right"> <small><i class="mdi mdi-calendar-check"></i> {{$solicitud->fecha_semaforo->format('l j \\ F')}}</small> </td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                        <tr class="text-center">
+                                            
+                                            <td class="max-texts">
+                                                <a href="javascript:void(0)">
+                                                    <small>
+                                                        <i class="mdi mdi-emoticon-sad"></i> No hay solicitudes en esta sección
+                                                    </small>
+                                                    <small></small>
+                                                </a>
+                                            </td>
+                                            
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
