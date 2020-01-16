@@ -13,7 +13,7 @@ class NoticiaUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,17 @@ class NoticiaUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules=[
+            'name'=>'required',
+            'slug'=>'required| unique:noticias,slug,'.$this->post,
+            'user_id'=> 'required|integer',
+            'body'=> 'required',
+            'status'=> 'required|in:DRAFT,PUBLISHED',
         ];
+        if($this->get('file')){
+            $rules= array_merge($rules,['file'=>'mimes:jpg,jpeg,png']);
+        }
+
+        return $rules;
     }
 }

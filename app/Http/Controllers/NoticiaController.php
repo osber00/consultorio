@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Consultorio\Models\Noticia;
 use Illuminate\Contracts\Auth\Guard;
 use Consultorio\Http\requests\NoticiaStoreRequest;
+use Consultorio\Http\requests\NoticiaUpdateRequest;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -84,7 +85,8 @@ class NoticiaController extends Controller
      */
     public function edit($id)
     {
-        //
+         $noticia= Noticia::find($id);
+         return view('control.noticias.edit', compact('noticia'));
     }
 
     /**
@@ -94,9 +96,24 @@ class NoticiaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NoticiaUpdateRequest $request, $id)
     {
-        //
+         $noticia= Noticia::find($id);
+         
+         $noticia->fill($request->all())->save();
+
+         //Imagen
+
+       if($request->file('file')){
+            $path= Storage::disk('public2')->put('image',$request->file('file'));
+            $post->fill(['file'=>asset($path)])->save();
+       }
+
+       //etiquetas
+       
+
+         return redirect()->route('noticias.edit',$noticia->id)
+            ->with('info','Noticia actualizada con exito');
     }
 
     /**
@@ -107,6 +124,9 @@ class NoticiaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $noticia= Noticia::find($id);
+        
+        $noticia->delete();
+        return back()->with('info','Noticia Eliminada');
     }
 }

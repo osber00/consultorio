@@ -23,15 +23,25 @@
     <div class="col-md-12">
       <div class="card card-default">
         <div class="card-header">
-         <h2>Mostrando Noticia {{$noticia->id}}</h2>
+         <h2>Vista previa de la  Noticia {{$noticia->id}}</h2>
           
         </div>
       
-        <div class="card-body">
-          <p><strong> Nombre: </strong>{{$noticia->name}}</p>
-          <p><strong> Sufijo de Url: </strong>{{$noticia->slug}}</p>
-          <p><strong> Contenido: </strong>{{$noticia->body}}</p>
-          
+        <div class="col-md-4 align-self-center">
+          <div class="card mb-4 shadow-sm">
+            <img src="{{$noticia->file}}" class="img-fluid" alt="" width="100%" height="225">
+            <div class="card-body">
+              <h4>{{$noticia->name}}</h4>
+              <p class="card-text">{{$noticia->excerpt}}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Ver más</button>
+                 
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
         </div>
         
       </div>

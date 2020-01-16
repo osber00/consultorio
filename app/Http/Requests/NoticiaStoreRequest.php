@@ -25,7 +25,7 @@ class NoticiaStoreRequest extends FormRequest
     {
         $rules=[
             'name'=>'required',
-            'slug'=>'required',
+            'slug'=>'required| unique:noticias,slug',
             'user_id'=> 'required|integer',
             'body'=> 'required',
             'status'=> 'required|in:DRAFT,PUBLISHED',

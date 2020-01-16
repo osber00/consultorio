@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="card  card-default">
                 <div class=" card-header">
-                    Lista de Noticias
+                    Lista de Noticias (se muestran las tres primeras publicadas)
                     <a href="{{route('noticias.create')}}" class="btn btn-sm btn-primary float-right">
                         Crear
                     </a>
@@ -32,7 +32,8 @@
                   <thead>
                     <tr>
                       <th width="10px">id</th>
-                      <th>nombre</th>
+                      <th>Nombre</th>
+                      <th>Estado</th>
                       <th colspan="3">Acciones</th>
                     </tr>
                   </thead>
@@ -40,7 +41,18 @@
                     @foreach($noticias as $noticia)
                     <tr>
                       <th scope="row">{{$noticia->id}}</th>
-                      <td>{{$noticia->name}}</td>
+                      <td> {{$noticia->name}} </td>
+                      <td>
+
+                        @if(($noticia->status)==='DRAFT')
+                              <span class="label label-danger">Borrador</span>          
+                        @else
+                              <span class="label label-success">Publicado</span>
+                              
+                        @endif
+
+
+                        </td>
                       <td width="10px">
                                 <a href="{{route('noticias.show',$noticia->id)}}" class="btn btn-outline-secondary btn-sm">
                                     Ver
@@ -48,15 +60,18 @@
                        </td>
 
                        <td width="10px">
-                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <a href="{{route('noticias.edit',$noticia->id)}}" class="btn btn-outline-secondary btn-sm">
                                     Editar 
                                 </a>
                         </td>
 
                          <td width="10px">
-                                <a href="#" class="btn btn-outline-danger btn-sm">
-                                    Eliminar
-                                </a>
+                          {!! Form::open(['route'=>['noticias.destroy',$noticia->id],'method'=>'DELETE'])!!}
+
+                          <button class="btn btn-outline-danger btn-sm">Eliminar</button>
+
+                          {!! form::close() !!} 
+                               
                         </td>
                     </tr>
                     @endforeach
