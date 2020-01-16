@@ -1,15 +1,20 @@
 <?php
-
 namespace Consultorio\Http\Controllers;
-
 use Consultorio\Models\Monitorsolicitud;
 use Illuminate\Http\Request;
 use Consultorio\Models\Solicitud;
 use Consultorio\Models\Notasolicitud;
+use Consultorio\Models\Noticia;
 use Auth;
-
 class FrontController extends Controller
 {
+    public function home(){
+
+        $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(3)->get();
+      //  dd($noticias);
+        return view ('front.home', compact('noticias'));
+    }
+
     public function inicio(){
         if(auth()->user()){
             $solicitudes =  Solicitud::
@@ -21,17 +26,13 @@ class FrontController extends Controller
         }
     	return view('front.inicio',compact('solicitudes'));
     }
-
     public function solicitud(Request $request){
     	//dd($request->all());
-
         $rules = [
             'titulo' => 'required|min:5|max:200',
             'descripcion'=> 'required|min:15|max:600'
         ];
-
         $this->validate($request,$rules);
-
     	$solicitud = new Solicitud();
     	$solicitud->titulo = $request->get('titulo');
     	$solicitud->descripcion = $request->get('descripcion');
@@ -42,20 +43,17 @@ class FrontController extends Controller
     	$solicitud->prioridad_id = 6;
     	$solicitud->categoria_id = 1;
     	$solicitud->save();
-
         Monitorsolicitud::create([
             'solicitud_id' => $solicitud->id,
             'accion_id' => 1,
             'user_id'   => auth()->user()->id
         ]);
-
         Monitorsolicitud::create([
             'solicitud_id' => $solicitud->id,
             'accion_id' => 2,
             'user_id'   => 2,
             'detalles' => 'Nueva'
         ]);
-
         Monitorsolicitud::create([
             'solicitud_id' => $solicitud->id,
             'accion_id' => 15,
@@ -65,13 +63,11 @@ class FrontController extends Controller
     	$request->flash('paso2','Adjuntar documentos');
     	return redirect()->route('documentos',$solicitud->id);
     }
-
     public function documentos($solicitud_id){
         $solicitud = Solicitud::find($solicitud_id);
         $notasolicitud = Notasolicitud::where(['user_id'=>Auth::user()->id,'solicitud_id'=>$solicitud->id])->get();
         return view('front.documentos',compact('solicitud','notasolicitud'));
     }
-
     public function adjuntardocumentos(Request $request){
         $rule = [
             'nota' => 'required|min:5|max:220'
@@ -85,7 +81,6 @@ class FrontController extends Controller
                 $solicitud = Solicitud::find($request->get('solicitud_id'));
                 //Salvar archivo en public de storage
                 $ruta = $request->archivo->store($solicitud->id);
-
                 $notasolicitud = new Notasolicitud();
                 $notasolicitud->nota = $request->get('nota');
                 $notasolicitud->archivo = $ruta;
@@ -93,12 +88,9 @@ class FrontController extends Controller
                 $notasolicitud->user_id = Auth::user()->id;
                 $notasolicitud->solicitud_id = $solicitud->id;
                 $notasolicitud->save();
-
                 //$tutorial->pdf = $guide;
                 //$tutorial->save();
-
                 $num_nota = Notasolicitud::where(['solicitud_id'=>$solicitud->id,'eliminado'=>0])->count();
-
                 Monitorsolicitud::create([
                     'solicitud_id' => $solicitud->id,
                     'notasolicitud_id' => $notasolicitud->id,
@@ -106,7 +98,6 @@ class FrontController extends Controller
                     'user_id'   => auth()->user()->id,
                     'detalles' => 'Nota # '.$num_nota.', con archivo adjunto'
                 ]);
-
                 $request->session()->flash('archivo','exito');
                 return redirect()->route('documentos',$solicitud->id);
             }else{

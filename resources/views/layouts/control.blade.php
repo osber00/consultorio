@@ -145,6 +145,10 @@
                     <li>
                         <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Tutores</span></a>
                     </li>
+
+                    <li>
+                        <a class="waves-effect waves-dark" href="{{route('noticias.index')}}" aria-expanded="false"><i class="mdi mdi-laptop-windows"></i><span class="hide-menu">Noticias</span></a>
+                    </li>
                     <li>
                         <a class="waves-effect waves-dark" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
@@ -189,6 +193,18 @@
                 </div>
             </div>
             @show
+
+            @if(session('info'))
+                <div class="container">    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-success">
+                                {{session('info')}}
+                            </div>
+                        </div>
+                    </div>   
+                </div>  
+            @endif
             <!-- End Bread crumb and right sidebar toggle -->
             <!-- Start Page Content -->
             <div id="contenido">
@@ -206,6 +222,8 @@
             </div>
             <!-- End PAge Content -->
         </div>
+
+
         <!-- End Container fluid  -->
         <!-- footer -->
         <footer class="footer">
@@ -286,7 +304,7 @@
 
     })
 </script>
-
+@yield('scripts')
 @show
 </body>
 
