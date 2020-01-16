@@ -92,13 +92,13 @@ class DatosTestSeeder extends Seeder
 
             if($i==6){
                 Estado::create([
-                    'estado' => 'pausada'
+                    'estado' => 'esperando datos'
                 ]);
             }
 
             if($i==7){
                 Estado::create([
-                    'estado' => 'rechazada'
+                    'estado' => 'no admitida'
                 ]);
             }
         }
@@ -152,10 +152,47 @@ class DatosTestSeeder extends Seeder
 
     private function categorias()
     {
-        for ($i = 1; $i <=6; $i++){
-            Categoria::create([
-               'categoria' => 'categoria'.$i
-            ]);
+        for ($i = 1; $i <=8; $i++){
+            if ($i == 1) {
+                Categoria::create([
+                    'categoria' => 'Sin categoría'
+                ]);
+            }
+            if ($i == 2) {
+                Categoria::create([
+                    'categoria' => 'Derecho civil'
+                ]);
+            }
+            if ($i == 3) {
+                Categoria::create([
+                    'categoria' => 'Derecho laboral'
+                ]);
+            }
+            if ($i == 4) {
+                Categoria::create([
+                    'categoria' => 'Derecho público'
+                ]);
+            }
+            if ($i == 5) {
+                Categoria::create([
+                    'categoria' => 'Derecho penal'
+                ]);
+            }
+            if ($i == 6) {
+                Categoria::create([
+                    'categoria' => 'Derecho de familia'
+                ]);
+            }
+            if ($i == 7) {
+                Categoria::create([
+                    'categoria' => 'Conciliación'
+                ]);
+            }
+            if ($i == 8) {
+                Categoria::create([
+                    'categoria' => 'Consumo'
+                ]);
+            }
         }
     }
 

@@ -73,12 +73,12 @@
                             @endif
                         @endcan
                         <i class="mdi mdi-dots-vertical"></i>
-                        <small>Resolver antes de: 
+                        <span>Resolver antes de: 
                             <span class="text-info"><i class="mdi mdi-clock"></i> {{$solicitud->fecha_semaforo->format('l j \\ F h:i:s a')}}</span>
                             @if($ahora > $solicitud->semaforo)
-                                {{$ahora->diffForHumans($solicitud->fecha_semaforo)}}
+                                <span class="label label-danger"><i class="mdi mdi-alert"></i> Retrasada</span>
                             @endif
-                        </small>
+                        </span>
                     </p>
                     <p>
                         <i class="mdi mdi-account-check"></i>
@@ -399,7 +399,7 @@
 
 <!-- Modal editar nota -->
 <div class="modal fade" id="editarNota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="exampleModalLabel1">Edición de nota</h4>
@@ -447,10 +447,10 @@
 </div>
 
 <div class="modal fade" id="historialNota" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="exampleModalLabel1">Historial nota</h4>
+                <h4 class="modal-title" id="exampleModalLabel1">Historial de edición de la nota</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body" id="datos_historial_nota">
@@ -520,6 +520,7 @@
 
 
             $('.textarea_description').wysihtml5();
+            
 
             $('.btn_edicion_nota').click(function (e) {
                 enlace = $(this).attr('href');

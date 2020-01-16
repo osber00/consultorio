@@ -140,7 +140,7 @@
                         @endif
                     </li>
                     <li>
-                        <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Estudiantes</span></a>
+                        <a class="waves-effect waves-dark" href="{{route('adminestudiantes')}}" aria-expanded="false"><i class="mdi mdi-account-box"></i><span class="hide-menu">Estudiantes</span></a>
                     </li>
                     <li>
                         <a class="waves-effect waves-dark" href="" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Tutores</span></a>

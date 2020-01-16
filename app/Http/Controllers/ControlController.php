@@ -575,6 +575,13 @@ class ControlController extends Controller
         }
     }
 
+
+    //Administrar estudiantes
+    public function adminestudiantes(){
+        $usuarios = User::where(['rol_id'=>3, 'activo'=>1])->get();
+        return view('control.adminestudiantes',compact('usuarios'));
+    }
+
     //Acciones perfil Estudiante
     public function estudiante(){
         $solicitudes = Solicitud::where('eliminada',false)
