@@ -96,7 +96,7 @@ class NoticiaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NoticiaUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
          $noticia= Noticia::find($id);
          

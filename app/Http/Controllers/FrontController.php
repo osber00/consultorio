@@ -10,7 +10,7 @@ class FrontController extends Controller
 {
     public function home(){
 
-        $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(3)->get();
+        $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(4)->get();
       //  dd($noticias);
         return view ('front.home', compact('noticias'));
     }
