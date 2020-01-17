@@ -154,7 +154,7 @@
     <div class="container">
       <hr class="col-md-6 offset-md-3">
       <div id="owl-example" class="owl-carousel">
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
+        <div><a href="#"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
         <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
         <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
         <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
