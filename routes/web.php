@@ -20,6 +20,8 @@ Route::get('inicio','FrontController@home')->name('inicio');
 Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
+Route::get('categoria/{id}','FrontController@categoria')->name('categoria');
+
 
 Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 

@@ -5,14 +5,26 @@ use Illuminate\Http\Request;
 use Consultorio\Models\Solicitud;
 use Consultorio\Models\Notasolicitud;
 use Consultorio\Models\Noticia;
+use Consultorio\Models\Faq;
+use Consultorio\Models\Categoria;
 use Auth;
 class FrontController extends Controller
 {
     public function home(){
 
         $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(4)->get();
-      //  dd($noticias);
+      
         return view ('front.home', compact('noticias'));
+    }
+
+    public function categoria($id){
+
+        $categoria=Categoria::where('id',$id)->first();
+        $faqs=Faq::orderBy('id','ASC')->where('status','PUBLISHED')->where('category_id',$id)->get();
+
+       // dd($categoria->categoria);
+
+       return view ('front.categorias',compact('faqs','categoria'));
     }
 
     public function inicio(){

@@ -62,9 +62,7 @@
 			}
 		});
 	});
-
 	CKEDITOR.replace('body');
 </script>
 
 @endsection
-
