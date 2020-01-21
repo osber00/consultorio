@@ -144,8 +144,18 @@
       <div class="container">
         <h2>¿En qué te puedo ayudar?</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae. <br>Nulla id enim et erat tempor ultrices. Morbi ex lacus, interdum non finibus venenatis</p>
+            
+      {!! Form::open(['route'=>'buscar','method'=>'GET'])!!}
+        <div class="input-group mb-3">
+         
 
-        <input class="form-control col-md-6 offset-md-3" type="text" placeholder="Ejemplo: Derecho de petición">
+          {{Form::text('faq',null,['class'=>'form-control col-md-6 offset-md-3', 'placeholder'=>'Ejemplo: Derecho de petición'])}}
+          <div class="input-group-append">
+            {{Form::submit('Buscar',['class'=>'btn btn-outline-light']) }}
+          </div>
+        </div>
+      {!! Form::close() !!}
+       
       </div>
   </section>  
 

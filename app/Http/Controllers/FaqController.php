@@ -3,6 +3,8 @@
 namespace Consultorio\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Consultorio\Models\Faq;
+use Consultorio\Models\Categoria;
 
 class FaqController extends Controller
 {
@@ -11,9 +13,15 @@ class FaqController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $categorias= Categoria::orderBy('id','ASC')->pluck('categoria', 'id');    
+        $category_id = $request->get('category_id');
+        $faqs= Faq::orderBy('id','DESC')
+        ->category_id($category_id)
+        ->paginate(50);
+        
+        return view('control.faqs.index',compact('faqs','categorias'));
     }
 
     /**
@@ -23,7 +31,8 @@ class FaqController extends Controller
      */
     public function create()
     {
-        //
+        $categorias= Categoria::orderBy('id','ASC')->pluck('categoria', 'id');
+        return view('control.faqs.create',compact('categorias'));
     }
 
     /**
@@ -34,7 +43,10 @@ class FaqController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Faq::create($request->all());
+       
+       return redirect()->route('faqs.index')
+        ->with('info','Faq creada con exito');
     }
 
     /**
@@ -45,7 +57,9 @@ class FaqController extends Controller
      */
     public function show($id)
     {
-        //
+       $faq= Faq::find($id);
+        
+        return view('control.faqs.show', compact('faq'));
     }
 
     /**
@@ -56,7 +70,9 @@ class FaqController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categorias= Categoria::orderBy('id','ASC')->pluck('categoria', 'id');
+        $faq= Faq::find($id);
+        return view('control.faqs.edit', compact('faq','categorias'));
     }
 
     /**
@@ -68,7 +84,12 @@ class FaqController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $faq= Faq::find($id);
+         
+         $faq->fill($request->all())->save();
+
+         return redirect()->route('faqs.edit',$faq->id)
+            ->with('info','Faq actualizada con exito');
     }
 
     /**
@@ -79,6 +100,9 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $faq= Faq::find($id);
+        
+        $faq->delete();
+        return back()->with('info','Faq Eliminada');
     }
 }

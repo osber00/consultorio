@@ -53,7 +53,7 @@ class NoticiaController extends Controller
        //Imagen
 
        if($request->file('file')){
-            $path= Storage::disk('public')->put('image',$request->file('file'));
+            $path= Storage::disk('public2')->put('image',$request->file('file'));
             $noticia->fill(['file'=>asset($path)])->save();
        }
 
@@ -106,7 +106,7 @@ class NoticiaController extends Controller
 
        if($request->file('file')){
             $path= Storage::disk('public2')->put('image',$request->file('file'));
-            $post->fill(['file'=>asset($path)])->save();
+            $noticia->fill(['file'=>asset($path)])->save();
        }
 
        //etiquetas

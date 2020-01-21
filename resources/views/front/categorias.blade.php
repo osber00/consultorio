@@ -16,9 +16,11 @@
 	      	
 	        <h2>Preguntas Frecuentes</h2>
 	        @foreach($faqs as $faq)
-			        <div style="border: 1px solid #fff;border-radius: 15px;margin:10px ">
-			        	<p style="margin: 0;padding: 5px 0px">{{$faq->pregunta}}</p>
-			        </div>
+			        <a href="{{route('faq',$faq->slug)}}" style="text-decoration: none;"><div style="border: 1px solid #fff;border-radius: 15px;margin:10px;color: #fff; ">
+			        	<p style="margin: 0;padding: 5px 0px">
+			        		{{$faq->pregunta}}
+			        	</p>
+			        </div></a>
 			@endforeach        
 		 </div>
 	    </section> 
