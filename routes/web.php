@@ -15,11 +15,17 @@
     return view('welcome');
 });*/
 
-Route::get('/','FrontController@home')->name('home');
-Route::get('inicio','FrontController@home')->name('inicio');
+Route::get('/','FrontController@home')->name('front');
+Route::get('inicio','FrontController@inicio')->name('inicio');
 Route::post('solicitud','FrontController@solicitud')->name('solicitud');
 Route::get('documentos/{solicitud_id}','FrontController@documentos')->name('documentos');
 Route::post('adjuntardocumentos','FrontController@adjuntardocumentos')->name('adjuntardocumentos');
+
+Route::get('noticia/{slug}', 'FrontController@noticia')->name('noticia');
+Route::get('categoria/{id}','FrontController@categoria')->name('categoria');
+Route::get('faq/{slug}','FrontController@faq')->name('faq');
+Route::get('buscar','FrontController@buscador')->name('buscar');
+
 
 Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
 
@@ -41,6 +47,7 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
         
 
         Route::resource('noticias','NoticiaController');
+        Route::resource('faqs','FaqController');
         Route::get('adminestudiantes','ControlController@adminestudiantes')->name('adminestudiantes');
     });
 

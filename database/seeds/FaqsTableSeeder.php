@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Consultorio\Models\Noticia;
+use Consultorio\Models\Faq;
 
-class NoticiasTableSeeder extends Seeder
+class FaqsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,6 @@ class NoticiasTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Noticia::class,18)->create();
+        factory(Faq::class,200)->create();
     }
 }

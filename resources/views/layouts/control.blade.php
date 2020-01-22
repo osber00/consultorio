@@ -147,7 +147,10 @@
                     </li>
 
                     <li>
-                        <a class="waves-effect waves-dark" href="{{route('noticias.index')}}" aria-expanded="false"><i class="mdi mdi-laptop-windows"></i><span class="hide-menu">Noticias</span></a>
+                        <a class="waves-effect waves-dark" href="{{route('noticias.index')}}" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Noticias</span></a>
+                    </li>
+                    <li>
+                        <a class="waves-effect waves-dark" href="{{route('faqs.index')}}" aria-expanded="false"><i class="mdi mdi-comment-question-outline"></i><span class="hide-menu">Faqs</span></a>
                     </li>
                     <li>
                         <a class="waves-effect waves-dark" href="{{ route('logout') }}"

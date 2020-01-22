@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
    
-    <title>home</title>
+    <title>Consultorio Jurídico Virtual 2.0|Cecar</title>
+     <link rel="icon" href="{{asset('front/images/site/fav-icon.png')}}">
+     <link rel="shortcut icon" href="{{asset('favicon.ico')}}">
 
    
 
@@ -42,7 +44,7 @@
      
       .carousel-inner img {
         width: 100%;
-        height: 350px;
+        height: 450px;
       }
       
 
@@ -58,43 +60,43 @@
   <body>
     <header>
   
-  <div class="navbar navbar-dark bg-dark shadow-sm">
-    <div class="container d-flex justify-content-between">
-      <a href="#" class="navbar-brand d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <p style="margin: 0">Consultorio</p><strong>Jurídico</strong>
-      </a>
-       <ul class="nav justify-content-end ">
-                        <!-- Authentication Links -->
-                        @if (Auth::guest())
-                        <ul class="nav justify-content-end">
-                            <li class="nav-item"><a href="{{ route('login') }}" class="nav-link"> Ingresar</a></li>
-                            <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Registrarme</a></li>
-                        </ul>   
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->nombre}} <span class="caret"></span>
-                                </a>
+      <div class="navbar navbar-dark shadow-sm" style="background-color: #c10230">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand d-flex align-items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <p style="margin: 0">Consultorio</p><strong>Jurídico</strong>
+          </a>
+           <ul class="nav justify-content-end ">
+                            <!-- Authentication Links -->
+                            @if (Auth::guest())
+                            <ul class="nav justify-content-end">
+                                <li class="nav-item"><a href="{{ route('login') }}" class="nav-link" style="color:#fff; border:2px solid #fff;margin: 5px;padding: 0px 20px;border-radius: 12px"> Iniciar Sesión</a></li>
+                                <li class="nav-item"><a href="{{ route('register') }}" class="nav-link " style="color:#fff;border:2px solid #fff;margin: 5px;padding: 0px 20px;border-radius: 12px">Registrarme</a></li>
+                            </ul>   
+                            @else
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" style="color:#fff;text-decoration: none;" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        {{ Auth::user()->nombre}} <span class="caret"></span>
+                                    </a>
 
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="{{ route('logout') }}" class="dropdown-item"
+                                                onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                                                <img src="{{asset('img/off.png')}}" width="20px" alt="">&nbsp Cerrar Sesión
+                                            </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-    </div>
-  </div>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                {{ csrf_field() }}
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
+                        </ul>
+        </div>
+      </div>
 </header>
 
 <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
@@ -138,37 +140,60 @@
 
 <main role="main">
 
-  <section class="jumbotron text-center">
+  <section class="jumbotron text-center" style="background-color: #c10230; color:white;margin: 0">
+      <div class="container">
+        <h2>¿En qué te puedo ayudar?</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae. <br>Nulla id enim et erat tempor ultrices. Morbi ex lacus, interdum non finibus venenatis</p>
+            
+      {!! Form::open(['route'=>'buscar','method'=>'GET'])!!}
+        <div class="input-group mb-3">
+         
+
+          {{Form::text('faq',null,['class'=>'form-control col-md-6 offset-md-3', 'placeholder'=>'Ejemplo: Derecho de petición'])}}
+          <div class="input-group-append">
+            {{Form::submit('Buscar',['class'=>'btn btn-outline-light']) }}
+          </div>
+        </div>
+      {!! Form::close() !!}
+       
+      </div>
+  </section>  
+
+  <section class="jumbotron text-center bg-light" style="margin: 0">
     <h2>Categorias</h2>
-    <p>Aqui encontraras las categorias</p>
+    
     <div class="container">
+      <hr class="col-md-6 offset-md-3">
       <div id="owl-example" class="owl-carousel">
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
-        <div><img src="{{asset('img/1.jpg')}}" alt=""></div>
+        
+        <div><a href="{{route('categoria','1')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','2')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','3')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','4')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','5')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','6')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','7')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+        <div><a href="{{route('categoria','8')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
       </div>
     </div>
   </section>
 
+
   @yield('content')
 
+
+<p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
 </main>
 
 
 
-
-<footer class="card-footer">
+<footer class="navbar navbar-dark shadow-sm" style="background-color: #c10230;color:#fff">
+  
   <div class="container">
-    <p class="float-right">
-      <a href="#">Back to top</a>
-    </p>
     
+    <p><center>Consultorio Jurídico Virtual 2.0 Cecar &copy{{date('Y')}}</center></p>
   </div>
 </footer>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">

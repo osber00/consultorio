@@ -9,4 +9,6 @@ class Categoria extends Model
 
 	protected $fillable = ['categoria'];
     public $timestamps = false;
+
+       
 }

@@ -155,42 +155,68 @@ class DatosTestSeeder extends Seeder
         for ($i = 1; $i <=8; $i++){
             if ($i == 1) {
                 Categoria::create([
-                    'categoria' => 'Sin categoría'
+                    'categoria' => 'Sin categoría',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat1.png',
+
+
                 ]);
             }
             if ($i == 2) {
                 Categoria::create([
-                    'categoria' => 'Derecho civil'
+                    'categoria' => 'Derecho civil',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat2.png',
+
+
                 ]);
             }
             if ($i == 3) {
                 Categoria::create([
-                    'categoria' => 'Derecho laboral'
+                    'categoria' => 'Derecho laboral',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat3.png',
+
                 ]);
             }
             if ($i == 4) {
                 Categoria::create([
-                    'categoria' => 'Derecho público'
+                    'categoria' => 'Derecho público',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat4.png',
+
                 ]);
             }
             if ($i == 5) {
                 Categoria::create([
-                    'categoria' => 'Derecho penal'
+                    'categoria' => 'Derecho penal',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat5.png',
+
                 ]);
             }
             if ($i == 6) {
                 Categoria::create([
-                    'categoria' => 'Derecho de familia'
+                    'categoria' => 'Derecho de familia',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat6.png',
+
                 ]);
             }
             if ($i == 7) {
                 Categoria::create([
-                    'categoria' => 'Conciliación'
+                    'categoria' => 'Conciliación',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat7.png',
+
                 ]);
             }
             if ($i == 8) {
                 Categoria::create([
-                    'categoria' => 'Consumo'
+                    'categoria' => 'Consumo',
+                    'descripcion'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis faucibus porta metus, at posuere ex facilisis vitae.',
+                    'imagen'=>'http://localhost/consultorio/public/img/cat8.png',
+
                 ]);
             }
         }

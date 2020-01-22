@@ -5,14 +5,56 @@ use Illuminate\Http\Request;
 use Consultorio\Models\Solicitud;
 use Consultorio\Models\Notasolicitud;
 use Consultorio\Models\Noticia;
+use Consultorio\Models\Faq;
+use Consultorio\Models\Categoria;
 use Auth;
 class FrontController extends Controller
 {
     public function home(){
 
-        $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(3)->get();
-      //  dd($noticias);
+        $noticias= Noticia::orderBy('id','DESC')->where('status','PUBLISHED')->limit(4)->get();
+      
         return view ('front.home', compact('noticias'));
+    }
+
+    public function noticia($slug){
+
+        $noticia=noticia::where('slug', $slug)->first();
+        return view('front.noticia', compact('noticia'));
+    }
+
+    public function categoria($id){
+
+        $categoria=Categoria::where('id',$id)->first();
+        $faqs=Faq::orderBy('id','ASC')->where('status','PUBLISHED')->where('category_id',$id)->get();
+
+       // dd($categoria->categoria);
+
+       return view ('front.categorias',compact('faqs','categoria'));
+    }
+
+    public function faq($slug){
+
+        $faq= Faq::where('slug',$slug)->first();
+
+        return view ('front.faq',compact('faq'));
+    }
+
+    public function buscador(Request $request){
+
+        if ($faq= $request->get('faq'))
+
+        $items=Faq::orderBy('id','DESC')
+            ->where('status','PUBLISHED')
+            ->faq($faq)
+            ->paginate(50);   
+
+        else($items=0);
+
+        return view ('front.buscador',compact('items'));
+
+
+
     }
 
     public function inicio(){

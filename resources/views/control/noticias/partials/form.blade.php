@@ -2,7 +2,7 @@
 
 
 <div class="form-group">
-	{{Form::label('name','Nombre de la Entrada') }}
+	{{Form::label('name','Nombre de la Noticia') }}
 	{{Form::text('name',null,['class'=>'form-control', 'id'=>'name'])}}
 </div>
 
@@ -62,9 +62,7 @@
 			}
 		});
 	});
-
 	CKEDITOR.replace('body');
 </script>
 
 @endsection
-
