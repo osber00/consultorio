@@ -201,8 +201,7 @@
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             @foreach($estudiantes as $estudiante)
                                                 <a class="dropdown-item @if($estudiante->id == $solicitud->responsable_id) active @endif" href="{{route('asignaresponsable',[$solicitud->id,$estudiante->id])}}">
-                                                    {{$estudiante->nombre}}
-                                                </a>
+                                                    {{$estudiante->nombre}} {{$estudiante->casos_atendidos}}
                                             @endforeach
                                         </div>
                                     </div>

@@ -36,6 +36,10 @@ Route::group(['prefix'=>'control','middleware' => 'auth'],function(){
         Route::get('rechazarsolicitud/{id}','ControlController@rechazarsolicitud')->name('rechazarsolicitud');
         Route::get('pausarsolicitud/{id}','ControlController@pausarsolicitud')->name('pausarsolicitud');
 
+        //Admin estudiantes y revisores
+        Route::post('nuevousuario','UserController@nuevousuario')->name('nuevousuario');
+        
+
         Route::resource('noticias','NoticiaController');
         Route::get('adminestudiantes','ControlController@adminestudiantes')->name('adminestudiantes');
     });

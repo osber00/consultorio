@@ -112,7 +112,10 @@ class ControlController extends Controller
             ->with(['user','responsable','revisor','manejador','estado','prioridad','categoria'])
             ->first();
         if (Gate::allows('versolicitud',$solicitud)){
-            $estudiantes = User::where(['rol_id'=>3, 'activo' => 1])->get();
+            $estudiantes = User::where(['rol_id'=>3, 'activo'=>1])
+                ->with('solicitudes')
+                ->selectRaw('users.*,(SELECT COUNT(*) FROM solicituds WHERE users.id = solicituds.responsable_id) as casos_atendidos')
+                ->get();
             $tutores = User::where(['rol_id'=>2, 'activo' => 1])->get();
             $categorias = Categoria::all();
             $prioridades = Prioridad::all();
@@ -578,7 +581,13 @@ class ControlController extends Controller
 
     //Administrar estudiantes
     public function adminestudiantes(){
-        $usuarios = User::where(['rol_id'=>3, 'activo'=>1])->get();
+
+        //->selectRaw('cursos.*,(SELECT COUNT(*) FROM videoconferencias WHERE videoconferencias.curso_id = cursos.id && videoconferencias.categoria_id = 1 ) as totalVC1')
+        $usuarios = User::where(['rol_id'=>3, 'activo'=>1])
+        ->with('solicitudes')
+        ->selectRaw('users.*,(SELECT COUNT(*) FROM solicituds WHERE users.id = solicituds.responsable_id) as casos_atendidos')
+        ->get();
+        //dd($usuarios);
         return view('control.adminestudiantes',compact('usuarios'));
     }
 

@@ -96,3 +96,10 @@
     </div>
 @endif
 
+@if(session('nuevousuario'))
+    <div class="alert alert-info">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+        <h3 class="text-info"><i class="fa fa-check-circle"></i> Nuevo usuario</h3>
+        El usuario {{session('nuevousuario')}} fue agregado(a)
+    </div>
+@endif

@@ -13,20 +13,24 @@
 @endsection
 
 @section('contenido')
+@include('partials.confirmaciones')
 <div class="row">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<h4>Título de tabla</h4>
+				<h4>Lista de estudiantes activos 
+					<i class="mdi mdi-dots-vertical"></i> 
+					<small><a href="javascript:void(0)" data-toggle="modal" data-target="#nuevousuario" class="btn btn-danger btn-xs">Nuevo estudiante</a></small>
+				</h4>
 				<div class="table-responsive m-t-20">
 					<table id="cursostutores" class="table stylish-table" cellspacing="0" width="100%">
 						<thead>
 							<tr>
 								<th></th>
 								<th>Nombre</th>
-								<th>Email <i class="mdi mdi-dots-vertical"></i> Teléfono </th>
-								<th>Acceso curso</th>
-								<th>Notificar</th>
+								<th>Email <i class="mdi mdi-dots-vertical"></i> Casos </th>
+								<th class="text-center">Acceso a plataforma</th>
+								<th class="text-center">Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -36,20 +40,20 @@
 								<td>
 									<h6>{{str_limit($usuario->nombre,22)}}</h6>
 									{{--<h6>{{str_limit($usuario->fullname,45)}}</h6>--}}
-									<small class="text-primary"> --</small>
+									<small class="text-primary"><i class="mdi mdi-phone"></i> {{$usuario->telefono}}</small>
 								</td>
 								<td class="font-med">
-									{{str_limit($usuario->email,25)}} 
+									<small>{{str_limit($usuario->email,25)}}</small> 
 									<i class="mdi mdi-dots-vertical"></i>
-									<i class="mdi mdi-phone"></i> {{$usuario->telefono}}
+									<span class="label label-info">{{$usuario->casos_atendidos}}</span>
 								</td>
-								<td>
-									<span class="label label-info font-small">--</span>
-
-
+								<td class="text-center">
+									<span class="label label-info font-small">
+										--
+									</span>
 								</td>
-								<td>
-									--
+								<td class="text-center">
+									<a href="" class="btn btn-info btn-xs"><i class="mdi mdi-pencil"></i> Editar</a>
 								</td>
 							</tr>
 							@endforeach
@@ -60,13 +64,55 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal nuevo usuario -->
+<div class="modal fade" id="nuevousuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel1">Nuevo estudiante</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('nuevousuario')}}" method="POST">
+                    {{csrf_field()}}
+                    <input type="hidden" name="rol_id" value="3">
+                    <div class="form-froup">
+                    	<label for="nombre"></label>
+                    	<input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-froup">
+                    	<label for="identificacion"></label>
+                    	<input type="text" name="identificacion" id="identificacion" class="form-control" placeholder="Identificación">
+                    </div>
+                    <div class="form-froup">
+                    	<label for="email"></label>
+                    	<input type="email" name="email" id="email" class="form-control" placeholder="Correo electrónico">
+                    </div>
+                    <div class="form-froup">
+                    	<label for="telefono"></label>
+                    	<input type="telefono" name="telefono" id="telefono" class="form-control" placeholder="Teléfono">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
 @parent
 <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script>
-	$('#cursostutores, #cursostutores2').DataTable({
+	$(document).ready(function() {
+
+
+
+		$('#cursostutores, #cursostutores2').DataTable({
 		dom: 'Bfrtip',
             //order: [[ 2, "desc" ]],
             buttons: [
@@ -92,6 +138,7 @@
             		"previous": "Anterior"
             	}
             }
-    });
+    	});
+	});
 </script>
 @endsection
