@@ -11,7 +11,7 @@
 
 .owl-theme .owl-controls .owl-buttons div {
   background: transparent;
-  color: #869791;
+  color: #c10230;
   font-size: 40px;
   line-height: 200px;
   margin: 0;
@@ -27,3 +27,8 @@
   right: 0;
   padding-right: 20px;
 }
+
+.owl-theme .owl-controls .owl-page span {
+background:  #c10230;
+
+  }

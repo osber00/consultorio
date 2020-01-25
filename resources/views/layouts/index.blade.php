@@ -63,8 +63,8 @@
       <div class="navbar navbar-dark shadow-sm" style="background-color: #c10230">
         <div class="container d-flex justify-content-between">
           <a href="#" class="navbar-brand d-flex align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-            <p style="margin: 0">Consultorio</p><strong>Jurídico</strong>
+            <img src="{{asset('img/logo.png')}}" width="40px" alt="">
+            <p style="margin: 0">Consultorio </p><strong> Jurídico</strong>
           </a>
            <ul class="nav justify-content-end ">
                             <!-- Authentication Links -->
@@ -107,21 +107,21 @@
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="{{asset('img/2.jpg')}}" class="d-block w-100" alt="...">
+      <img src="{{asset('img/slider1.png')}}" class="d-block w-100 img-fluid" width="100%" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>First slide label</h5>
         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="{{asset('img/2.jpg')}}" class="d-block w-100" alt="...">
+      <img src="{{asset('img/slider1.png')}}" class="d-block w-100 img-fluid"width="100%" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Second slide label</h5>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="{{asset('img/2.jpg')}}" class="d-block w-100" alt="...">
+      <img src="{{asset('img/slider1.png')}}" class="d-block w-100 img-fluid"width="100%" alt="...">
       <div class="carousel-caption d-none d-md-block">
         <h5>Third slide label</h5>
         <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
@@ -160,20 +160,20 @@
   </section>  
 
   <section class="jumbotron text-center bg-light" style="margin: 0">
-    <h2>Categorias</h2>
+    <p style="color:#c10230;font-size: 25px">Categorias</p>
     
     <div class="container">
       <hr class="col-md-6 offset-md-3">
       <div id="owl-example" class="owl-carousel">
         
-        <div><a href="{{route('categoria','1')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','2')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','3')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','4')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','5')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','6')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','7')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
-        <div><a href="{{route('categoria','8')}}"><img src="{{asset('img/1.jpg')}}" alt=""></a></div>
+      
+        <div><a href="{{route('categoria','2')}}"><img src="{{asset('img/ctg2.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','3')}}"><img src="{{asset('img/ctg3.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','4')}}"><img src="{{asset('img/ctg4.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','5')}}"><img src="{{asset('img/ctg5.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','6')}}"><img src="{{asset('img/ctg6.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','7')}}"><img src="{{asset('img/ctg7.png')}}" width="200px" alt=""></a></div>
+        <div><a href="{{route('categoria','8')}}"><img src="{{asset('img/ctg8.png')}}" width="200px" alt=""></a></div>
       </div>
     </div>
   </section>

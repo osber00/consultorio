@@ -4,9 +4,8 @@
 
 		<section class="jumbotron text-center" style="background-color: #fff; color:#000;margin: 0">
 	      <div class="col-md-6 offset-md-3">
-	      	<img src="{{$categoria->imagen}}" alt="" width="200px" class="img-fluid">
-	        <h2>{{$categoria->categoria}}</h2>
-	        <p>{{$categoria->descripcion}}</p>
+	      	<img src="{{$categoria->imagen}}" alt="" width="" class="img-fluid">
+	         <p>{{$categoria->descripcion}}</p>
 	      </div>
 	  	</section> 
 
